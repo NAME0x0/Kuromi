@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPGRADE TO YOUR FUTURE</title>
+    <meta name="description" content="Upgrade your future. One signal at a time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fonts: Montserrat (for Hyperscale), Syncopate, Jost, Playfair Display -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;900&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-core: #050505;
+            --accent-glow: #7b2cbf;
+            --accent-sparkle: #e0aaff;
+            --text-primary: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: radial-gradient(circle at center, #1a0b2e 0%, #050505 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- INITIAL STATE: UPGRADE CARD --- */
+        .initial-stage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            min-height: 400px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            z-index: 10;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .initial-stage.fade-out {
+            opacity: 0;
+            transform: translate(-50%, -60%);
+            pointer-events: none;
+        }
+
+        /* Content Styling */
+        .fact-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+        }
+
+        .upgrade-text {
+            font-family: 'Jost', sans-serif;
+            font-size: 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease 0.1s;
+        }
+
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hide {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        /* Button */
+        .liquid-btn {
+            position: relative;
+            padding: 1.5rem 4rem;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            margin-top: 2rem;
+            box-shadow: inset 0 4px 15px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(123, 44, 191, 0.3);
+        }
+
+        .liquid-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(123, 44, 191, 0.5), 0 0 20px var(--accent-glow);
+        }
+
+        /* --- FINAL STATE: SPLIT VIEW --- */
+        .final-stage {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            gap: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+            pointer-events: none;
+            /* Disabled initially */
+        }
+
+        .final-stage.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Left: Profile Container (User's Design) */
+        .profile-container {
+            flex: 1;
+            background-image: url('assets/Space.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .header-top,
+        .header-bottom {
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            color: #e0e0e0;
+            text-transform: uppercase;
+            margin: 10px 0;
+        }
+
+        .header-main {
+            font-weight: 900;
+            font-size: clamp(30px, 5vw, 60px);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin: 0;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .avatar-section {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .avatar {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-section {
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 80%;
+        }
+
+        /* Right: Link Container */
+        .link-container {
+            flex: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .link-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .spotify-link {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--accent-sparkle);
+            text-decoration: none;
+            border-bottom: 2px solid var(--accent-sparkle);
+            padding-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .spotify-link:hover {
+            color: white;
+            border-color: white;
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* Persistent Footer */
+        .page-footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            transition: opacity 0.5s ease;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .page-footer.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .page-footer:hover {
+            color: white;
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .final-stage {
+                flex-direction: column;
+                height: auto;
+                padding-bottom: 60px;
+                /* Space for footer */
+            }
+
+            .profile-container,
+            .link-container {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- INITIAL STATE -->
+    <div class="initial-stage" id="initialCard">
+        <p class="fact-text" id="factText">INITIALIZING SYSTEM...<br>READY FOR UPGRADE.</p>
+        <div id="upgradeText" class="upgrade-text" style="display: none;"></div>
+
+        <button class="liquid-btn" id="revealBtn" onclick="revealUpgrade()">
+            <span id="btnText">Reveal More</span>
+        </button>
+    </div>
+
+    <!-- FINAL STATE (Split View) -->
+    <div class="final-stage" id="finalStage">
+        <!-- Left: Profile (CSS Generated) -->
+        <div class="profile-container">
+            <div class="header-section">
+                <div class="header-top">Briar Prestidge Presents</div>
+                <h1 class="header-main">Hyperscale</h1>
+                <div class="header-bottom">Podcast of the Future</div>
+            </div>
+
+            <div class="avatar-section">
+                <img src="assets/Avatar.jpg" alt="Briar Prestidge" class="avatar">
+            </div>
+
+            <div class="footer-section">
+                Briar Prestidge
+            </div>
+        </div>
+
+        <!-- Right: Link CTA -->
+        <div class="link-container">
+            <h2 class="link-title">Want to know how to upgrade yourself further?</h2>
+            <a href="https://open.spotify.com/show/0ysR06vv6dFCBrggJkixZI?si=6a6fdb4e1a954b7a&nd=1&dlsi=ae11d7268610400a"
+                target="_blank" class="spotify-link">Follow Hyperscale</a>
+        </div>
+    </div>
+
+    <!-- Persistent Footer -->
+    <a href="https://briarprestidge.komi.io" target="_blank" class="page-footer" id="pageFooter">To know more:
+        briarprestidge.komi.io</a>
+
+    <script>
+        const upgrades = [
+            {
+                fact: "You don't need more information. You need more silence.",
+                upgrade: "Remove one source of noise for 24 hours."
+            },
+            {
+                fact: "Attention is architecture. Build where it matters.",
+                upgrade: "Spend 10 minutes designing your focus tomorrow."
+            },
+            {
+                fact: "You're not stuck. You're processing.",
+                upgrade: "Delay one decision by 12 hours. Let it compute."
+            }
+        ];
+
+        let revealCount = 0;
+        let usedIndexes = [];
+
+        function getRandomUpgrade() {
+            if (usedIndexes.length >= upgrades.length) usedIndexes = [];
+            let index;
+            do {
+                index = Math.floor(Math.random() * upgrades.length);
+            } while (usedIndexes.includes(index));
+            usedIndexes.push(index);
+            return upgrades[index];
+        }
+
+        function revealUpgrade() {
+            const factText = document.getElementById('factText');
+            const upgradeText = document.getElementById('upgradeText');
+            const btn = document.getElementById('revealBtn');
+            const btnText = document.getElementById('btnText');
+            const initialCard = document.getElementById('initialCard');
+            const finalStage = document.getElementById('finalStage');
+            const footer = document.getElementById('pageFooter');
+
+            btn.disabled = true;
+
+            // Fade out current text
+            factText.classList.remove('show');
+            factText.classList.add('hide');
+            upgradeText.classList.remove('show');
+            upgradeText.classList.add('hide');
+
+            setTimeout(() => {
+                revealCount++;
+
+                if (revealCount <= 2) {
+                    // --- NORMAL REVEAL ---
+                    const data = getRandomUpgrade();
+                    factText.innerHTML = data.fact;
+                    upgradeText.innerHTML = `<span style="color:var(--accent-sparkle); font-weight:700; text-transform:uppercase; letter-spacing:2px; font-size:0.9rem;">Upgrade:</span><br>${data.upgrade}`;
+                    upgradeText.style.display = 'block';
+
+                    factText.classList.remove('hide');
+                    factText.classList.add('show');
+                    upgradeText.classList.remove('hide');
+                    upgradeText.classList.add('show');
+
+                    btnText.textContent = 'Reveal More';
+                    btn.disabled = false;
+                } else {
+                    // --- FINAL TRANSFORMATION (Split View) ---
+
+                    // 1. Fade Out Initial Card
+                    initialCard.classList.add('fade-out');
+
+                    // 2. Fade In Final Stage
+                    finalStage.classList.add('visible');
+
+                    // 3. Show Footer
+                    footer.classList.add('visible');
+                }
+            }, 500);
+        }
+
+        // Initial Fade In
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('factText').classList.add('show');
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>
