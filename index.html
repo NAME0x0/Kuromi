@@ -8,7 +8,6 @@
     <meta name="description" content="Upgrade your future. One signal at a time.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Fonts: Montserrat (for Hyperscale), Syncopate, Jost, Playfair Display -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;900&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap"
         rel="stylesheet">
@@ -41,7 +40,18 @@
             position: relative;
         }
 
-        /* --- INITIAL STATE: UPGRADE CARD --- */
+        /* Particle Background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Initial Stage */
         .initial-stage {
             position: absolute;
             top: 50%;
@@ -71,7 +81,6 @@
             pointer-events: none;
         }
 
-        /* Content Styling */
         .fact-text {
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
@@ -104,7 +113,7 @@
             transform: translateY(-10px);
         }
 
-        /* Button */
+        /* Button with Glitter */
         .liquid-btn {
             position: relative;
             padding: 1.5rem 4rem;
@@ -123,12 +132,70 @@
             box-shadow: inset 0 4px 15px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(123, 44, 191, 0.3);
         }
 
+        /* Animated Glitter Stars */
+        .liquid-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 30%, white 1px, transparent 1px),
+                radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.8) 1.5px, transparent 1.5px),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, white 2px, transparent 2px),
+                radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+                radial-gradient(circle at 15% 60%, rgba(255, 255, 255, 0.5) 1.5px, transparent 1.5px);
+            background-size: 100% 100%;
+            animation: glitterPulse 2s ease-in-out infinite, glitterMove 8s linear infinite;
+            pointer-events: none;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        @keyframes glitterPulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes glitterMove {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(5px, -3px);
+            }
+
+            50% {
+                transform: translate(-2px, 4px);
+            }
+
+            75% {
+                transform: translate(3px, -5px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .liquid-btn span {
+            position: relative;
+            z-index: 2;
+        }
+
         .liquid-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 15px 40px rgba(123, 44, 191, 0.5), 0 0 20px var(--accent-glow);
         }
 
-        /* --- FINAL STATE: SPLIT VIEW --- */
+        /* Final Stage Split View */
         .final-stage {
             display: flex;
             width: 90%;
@@ -139,7 +206,7 @@
             transform: translateY(20px);
             transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
             pointer-events: none;
-            /* Disabled initially */
+            z-index: 10;
         }
 
         .final-stage.visible {
@@ -148,7 +215,7 @@
             pointer-events: auto;
         }
 
-        /* Left: Profile Container (User's Design) */
+        /* Left: Profile Container */
         .profile-container {
             flex: 1;
             background-image: url('assets/Space.jpg');
@@ -237,45 +304,75 @@
             margin-bottom: 2rem;
         }
 
-        .spotify-link {
+        .spotify-link,
+        .insta-link {
             font-family: 'Syncopate', sans-serif;
             font-weight: 700;
-            font-size: 1.5rem;
             color: var(--accent-sparkle);
             text-decoration: none;
             border-bottom: 2px solid var(--accent-sparkle);
             padding-bottom: 5px;
             transition: all 0.3s ease;
+            display: inline-block;
         }
 
-        .spotify-link:hover {
+        .spotify-link {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .insta-link {
+            font-size: 1.2rem;
+        }
+
+        .spotify-link:hover,
+        .insta-link:hover {
             color: white;
             border-color: white;
             text-shadow: 0 0 20px var(--accent-glow);
         }
 
-        /* Persistent Footer */
+        /* Persistent Footer - Always Visible */
         .page-footer {
             position: absolute;
             bottom: 20px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.3);
-            text-decoration: none;
-            transition: opacity 0.5s ease;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .page-footer.visible {
-            opacity: 1;
             pointer-events: auto;
         }
 
-        .page-footer:hover {
+        .footer-text {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .social-btn:hover {
             color: white;
+            transform: scale(1.1);
         }
 
         /* Mobile */
@@ -283,13 +380,16 @@
             .final-stage {
                 flex-direction: column;
                 height: auto;
-                padding-bottom: 60px;
-                /* Space for footer */
+                padding-bottom: 100px;
             }
 
             .profile-container,
             .link-container {
                 min-height: 400px;
+            }
+
+            .page-footer {
+                bottom: 10px;
             }
         }
     </style>
@@ -297,7 +397,9 @@
 
 <body>
 
-    <!-- INITIAL STATE -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Initial State -->
     <div class="initial-stage" id="initialCard">
         <p class="fact-text" id="factText">INITIALIZING SYSTEM...<br>READY FOR UPGRADE.</p>
         <div id="upgradeText" class="upgrade-text" style="display: none;"></div>
@@ -307,9 +409,8 @@
         </button>
     </div>
 
-    <!-- FINAL STATE (Split View) -->
+    <!-- Final State -->
     <div class="final-stage" id="finalStage">
-        <!-- Left: Profile (CSS Generated) -->
         <div class="profile-container">
             <div class="header-section">
                 <div class="header-top">Briar Prestidge Presents</div>
@@ -326,19 +427,126 @@
             </div>
         </div>
 
-        <!-- Right: Link CTA -->
         <div class="link-container">
             <h2 class="link-title">Want to know how to upgrade yourself further?</h2>
             <a href="https://open.spotify.com/show/0ysR06vv6dFCBrggJkixZI?si=6a6fdb4e1a954b7a&nd=1&dlsi=ae11d7268610400a"
-                target="_blank" class="spotify-link">Follow Hyperscale</a>
+                target="_blank" class="spotify-link">FOLLOW HYPERSCALE</a>
+            <br>
+            <a href="https://www.instagram.com/briarprestidge/" target="_blank" class="insta-link">FOLLOW
+                @BRIARPRESTIDGE</a>
         </div>
     </div>
 
     <!-- Persistent Footer -->
-    <a href="https://briarprestidge.komi.io" target="_blank" class="page-footer" id="pageFooter">To know more:
-        briarprestidge.komi.io</a>
+    <div class="page-footer">
+        <div class="footer-text">FOLLOW FOR MORE:</div>
+        <div class="social-icons">
+            <a href="https://briarprestidge.komi.io" target="_blank" class="social-btn">
+                <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M20 6.66687C17.3629 6.66687 14.785 7.44886 12.5924 8.91394C10.3997 10.379 8.69074 12.4614 7.68157 14.8978C6.6724 17.3341 6.40836 20.015 6.92283 22.6014C7.4373 25.1878 8.70717 27.5636 10.5719 29.4283C12.4366 31.293 14.8123 32.5629 17.3988 33.0773C19.9852 33.5918 22.6661 33.3278 25.1024 32.3186C27.5387 31.3094 29.6211 29.6005 31.0862 27.4078C32.5513 25.2151 33.3333 22.6373 33.3333 20.0002C33.3295 16.4652 31.9235 13.076 29.4238 10.5763C26.9242 8.07668 23.535 6.67069 20 6.66687V6.66687ZM20 31.1113C18.5236 31.1121 17.0619 30.8176 15.701 30.2451C14.3401 29.6727 13.1074 28.8339 12.0755 27.778L13.6922 26.4202C13.8563 26.2822 13.977 26.0997 14.0397 25.8946C14.1024 25.6896 14.1044 25.4708 14.0455 25.2646L13.2677 22.518C13.2189 22.3485 13.131 22.1929 13.0111 22.0635L11.6377 20.5958L11.43 20.2413L12.1411 19.6335L14.9044 18.2358C15.0631 18.1555 15.2002 18.0383 15.3042 17.8941C15.4083 17.7499 15.4761 17.5828 15.5022 17.4069L15.9466 14.3624C15.9715 14.1982 15.9593 14.0306 15.9108 13.8717C15.8623 13.7129 15.7789 13.567 15.6666 13.4446L13.8344 11.4891C13.8021 11.4536 13.7672 11.4205 13.73 11.3902L13.3766 11.1002C15.1606 9.76623 17.3065 9.00352 19.5322 8.91242L20.03 9.7402L20.6811 11.6435C20.7497 11.8418 20.8725 12.0169 21.0355 12.1491L23.5733 14.1902C23.7707 14.3491 24.0165 14.4357 24.27 14.4358C24.3138 14.4359 24.3576 14.4333 24.4011 14.428L27.7344 14.0324C27.8809 14.0147 28.0225 13.9682 28.1511 13.8958L28.9488 13.4424C30.167 15.0955 30.9022 17.0542 31.0727 19.1005C31.2432 21.1468 30.8422 23.2003 29.9144 25.0321C28.9867 26.864 27.5685 28.4022 25.818 29.4756C24.0675 30.5489 22.0533 31.1152 20 31.1113Z"
+                        fill="currentColor"></path>
+                    <path
+                        d="M28.7711 20.4904L27.51 18.0704C27.4365 17.9291 27.3335 17.8053 27.2079 17.7073C27.0823 17.6094 26.9372 17.5395 26.7823 17.5026L24.1634 16.8759C23.9556 16.8262 23.738 16.8378 23.5367 16.9093L21.0623 17.7781C20.8653 17.8469 20.6916 17.9697 20.5611 18.1326L19.0745 20.3248C18.916 20.6449 18.8869 21.0138 18.9934 21.3548L19.8956 23.6459L19.34 25.5559C19.3012 25.7178 19.2999 25.8864 19.3361 26.049C19.3723 26.2115 19.4451 26.3636 19.5489 26.4937L20.2789 28.4215C20.3832 28.548 20.5142 28.6499 20.6625 28.7198C20.8108 28.7897 20.9727 28.826 21.1367 28.8259H21.2078L23.8067 28.6592C24.063 28.6427 24.3056 28.5379 24.4934 28.3626L26.4511 26.5392C26.5609 26.4375 26.6489 26.3147 26.71 26.1781L28.8011 21.4559C28.8691 21.3031 28.9018 21.1369 28.8966 20.9697C28.8914 20.8025 28.8485 20.6387 28.7711 20.4904Z"
+                        fill="currentColor"></path>
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/briarprestidge/" target="_blank" class="social-btn">
+                <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M30.5614 30.562H26.1164V23.6006C26.1164 21.9406 26.0867 19.8037 23.8045 19.8037C21.4893 19.8037 21.1351 21.6123 21.1351 23.4798V30.5616H16.6901V16.2461H20.9573V18.2025H21.017C21.4441 17.4723 22.0612 16.8716 22.8026 16.4644C23.544 16.0571 24.382 15.8587 25.2273 15.89C29.7326 15.89 30.5633 18.8535 30.5633 22.7088L30.5614 30.562ZM11.6745 14.2893C11.1644 14.2894 10.6656 14.1382 10.2414 13.8548C9.8171 13.5714 9.48641 13.1686 9.29108 12.6973C9.09576 12.226 9.04459 11.7073 9.14403 11.2069C9.24347 10.7065 9.48906 10.2468 9.84975 9.88595C10.2104 9.52512 10.67 9.27935 11.1704 9.17973C11.6707 9.0801 12.1894 9.1311 12.6608 9.32626C13.1322 9.52142 13.5351 9.85198 13.8186 10.2761C14.1021 10.7003 14.2535 11.199 14.2536 11.7092C14.2537 12.048 14.187 12.3834 14.0574 12.6964C13.9278 13.0094 13.7379 13.2938 13.4984 13.5334C13.2589 13.773 12.9746 13.9631 12.6616 14.0928C12.3487 14.2225 12.0133 14.2892 11.6745 14.2893ZM13.8971 30.562H9.44737V16.2461H13.8971V30.562ZM32.7775 5.00204H7.21374C6.63351 4.9955 6.07442 5.21958 5.65932 5.62505C5.24422 6.03053 5.00708 6.58422 5 7.16445V32.8351C5.00684 33.4156 5.24384 33.9697 5.65892 34.3756C6.074 34.7815 6.63322 35.006 7.21374 34.9998H32.7775C33.3591 35.0071 33.9199 34.7832 34.3366 34.3774C34.7534 33.9715 34.9919 33.4168 35 32.8351V7.1626C34.9917 6.58121 34.753 6.02689 34.3362 5.62143C33.9195 5.21597 33.3588 4.99252 32.7775 5.00019V5.00204Z"
+                        fill="currentColor"></path>
+                </svg>
+            </a>
+            <a href="https://www.instagram.com/briarprestidge/" target="_blank" class="social-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M7.71344 4.02039C7.91512 4.00366 8.95265 4 12.5002 4H15.266C17.2591 4.00346 17.3725 4.01989 17.7512 4.07472L17.7731 4.0779C18.5924 4.19606 19.2799 4.52282 19.8421 5.05975C20.1571 5.36286 20.374 5.6593 20.5694 6.05625C20.8076 6.54116 20.9246 6.99994 20.9782 7.68222C20.9897 7.82861 20.9949 10.1583 20.9949 12.4895C20.9949 14.8204 20.99 17.1544 20.9785 17.3008C20.9256 17.9722 20.8086 18.4349 20.5779 18.9107C20.1192 19.857 19.2761 20.5471 18.2579 20.8098C17.8887 20.9052 17.5547 20.9501 16.9796 20.9771C16.7744 20.9876 14.6282 20.9902 12.4821 20.9902C10.3359 20.9902 8.19104 20.9837 7.9806 20.9745C7.48393 20.951 7.09704 20.9013 6.74675 20.8111C5.73509 20.5497 4.87636 19.8491 4.42674 18.9159C4.19147 18.4284 4.08037 17.9827 4.02155 17.2742C4.00456 17.073 4.00064 16.0365 4.00064 12.4918C4.00064 12.0575 4.00047 11.6633 4.00031 11.3051C4.00004 10.6782 3.99981 10.1611 4.00064 9.73062C4.00398 7.73524 4.02021 7.62328 4.07541 7.24248C4.07635 7.23596 4.07731 7.22935 4.07828 7.22266C4.19657 6.40418 4.52333 5.71563 5.06249 5.15595C5.35853 4.84906 5.6585 4.63013 6.03885 4.44126C6.53239 4.19553 6.98542 4.08091 7.71344 4.02039ZM9.90967 6.25989C10.5789 6.22944 10.7927 6.22198 12.4966 6.22198H12.4946C14.199 6.22198 14.4121 6.22944 15.0813 6.25989C15.7492 6.29047 16.2053 6.39621 16.6053 6.55136C17.0183 6.71147 17.3673 6.92583 17.7163 7.27481C18.0653 7.62353 18.2796 7.97356 18.4404 8.38619C18.5946 8.78511 18.7005 9.241 18.7319 9.90891C18.7619 10.5781 18.7698 10.7919 18.7698 12.4958C18.7698 14.1997 18.7619 14.413 18.7319 15.0822C18.7005 15.7498 18.5946 16.2059 18.4404 16.6049C18.2796 17.0174 18.0653 17.3674 17.7163 17.7162C17.3677 18.0651 17.0182 18.28 16.6057 18.4403C16.2065 18.5954 15.7501 18.7012 15.0822 18.7317C14.413 18.7622 14.1998 18.7696 12.4958 18.7696C10.7921 18.7696 10.5784 18.7622 9.90915 18.7317C9.24138 18.7012 8.78535 18.5954 8.38618 18.4403C7.9738 18.28 7.62378 18.0651 7.27519 17.7162C6.92634 17.3674 6.71198 17.0174 6.55161 16.6048C6.39659 16.2059 6.29085 15.75 6.26013 15.0821C6.22981 14.4129 6.22223 14.1997 6.22223 12.4958C6.22223 10.7919 6.23007 10.578 6.26 9.90878C6.29006 9.24114 6.39594 8.78511 6.55147 8.38606C6.71224 7.97356 6.9266 7.62353 7.27558 7.27481C7.6243 6.92596 7.97433 6.71161 8.38696 6.55136C8.78587 6.39621 9.24177 6.29047 9.90967 6.25989ZM12.2875 7.35252C12.1606 7.35246 12.0431 7.35241 11.9338 7.35258V7.35101C10.7645 7.35232 10.5402 7.36016 9.96143 7.3863C9.34973 7.4144 9.01761 7.51635 8.79646 7.60262C8.50368 7.71659 8.29455 7.85253 8.07497 8.07211C7.85539 8.2917 7.71919 8.50082 7.60548 8.7936C7.5196 9.01475 7.41739 9.34675 7.38942 9.95844C7.35936 10.6198 7.35335 10.8174 7.35335 12.4928C7.35335 14.1682 7.35936 14.3669 7.38942 15.0282C7.41726 15.6399 7.5196 15.9719 7.60548 16.1928C7.71945 16.4857 7.85539 16.6943 8.07497 16.9139C8.29455 17.1335 8.50368 17.2694 8.79646 17.3831C9.01774 17.469 9.34973 17.5712 9.96143 17.5994C10.6228 17.6295 10.8213 17.636 12.4966 17.636C14.1717 17.636 14.3704 17.6295 15.0317 17.5994C15.6434 17.5715 15.9757 17.4695 16.1966 17.3833C16.4895 17.2695 16.698 17.1336 16.9175 16.914C17.1371 16.6946 17.2733 16.4861 17.387 16.1933C17.4729 15.9724 17.5751 15.6404 17.6031 15.0287C17.6332 14.3674 17.6397 14.1687 17.6397 12.4944C17.6397 10.82 17.6332 10.6214 17.6031 9.96001C17.5752 9.34831 17.4729 9.01632 17.387 8.79543C17.2731 8.50265 17.1371 8.29353 16.9175 8.07394C16.6981 7.85436 16.4894 7.71842 16.1966 7.60471C15.9754 7.51884 15.6434 7.41663 15.0317 7.38866C14.3702 7.35859 14.1717 7.35258 12.4966 7.35258C12.4242 7.35258 12.3545 7.35255 12.2875 7.35252ZM15.0926 9.1469C15.0926 8.73112 15.4299 8.3943 15.8455 8.3943V8.39404C16.2611 8.39404 16.5984 8.73126 16.5984 9.1469C16.5984 9.56254 16.2611 9.89976 15.8455 9.89976C15.4299 9.89976 15.0926 9.56254 15.0926 9.1469ZM9.27471 12.4958C9.27471 10.7166 10.7172 9.27401 12.4965 9.27394C14.2757 9.27394 15.7179 10.7165 15.7179 12.4958C15.7179 14.2751 14.2759 15.717 12.4966 15.717C10.7173 15.717 9.27471 14.2751 9.27471 12.4958ZM14.5879 12.4958C14.5879 11.3408 13.6515 10.4045 12.4966 10.4045C11.3415 10.4045 10.4053 11.3408 10.4053 12.4958C10.4053 13.6507 11.3415 14.5871 12.4966 14.5871C13.6515 14.5871 14.5879 13.6507 14.5879 12.4958Z"
+                        fill="currentColor"></path>
+                </svg>
+            </a>
+            <a href="https://www.youtube.com/@briarprestidge" target="_blank" class="social-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="m10 15 5.19-3L10 9v6Zm11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44a2.34 2.34 0 0 1-1.73-1.73c-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73a14.1 14.1 0 0 1 2.65-.28c1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73Z">
+                    </path>
+                </svg>
+            </a>
+            <a href="https://twitter.com/briarprestidge" target="_blank" class="social-btn">
+                <svg viewBox="-3 -3 30 30" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M 13.861 10.469 L 21.148 2 L 19.42 2 L 13.095 9.354 L 8.042 2 L 2.215 2 L 9.856 13.12 L 2.215 22 L 3.941 22 L 10.621 14.235 L 15.958 22 L 21.785 22 L 13.861 10.469 Z M 11.498 13.217 L 10.723 12.11 L 4.563 3.3 L 7.216 3.3 L 12.187 10.41 L 12.96 11.517 L 19.421 20.76 L 16.77 20.76 L 11.498 13.218 L 11.498 13.217 Z"
+                        fill="currentColor"></path>
+                </svg>
+            </a>
+            <a href="https://www.tiktok.com/@briarprestidge" target="_blank" class="social-btn">
+                <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M26.1205 15.2246C28.0599 16.6098 30.435 17.4249 33.0001 17.4249V13.541C31.5683 13.2363 30.3007 12.4883 29.3475 11.448C27.7162 10.4305 26.5407 8.7519 26.1962 6.78716H22.5999V26.4946C22.5918 28.7921 20.7262 30.6523 18.4258 30.6523C17.0701 30.6523 15.8658 30.0066 15.1031 29.0061C13.741 28.3191 12.807 26.9085 12.807 25.2795C12.807 22.9755 14.6756 21.1076 16.981 21.1076C17.4227 21.1076 17.8484 21.1764 18.2477 21.303V17.3767C13.2969 17.479 9.31514 21.5222 9.31514 26.4948C9.31514 28.9771 10.3067 31.2274 11.9159 32.8715C13.3678 33.8459 15.1155 34.414 16.9957 34.414C22.0351 34.414 26.1205 30.3308 26.1205 25.2938V15.2246Z"
+                        fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M32.9992 13.541V12.4907C31.7079 12.4927 30.4421 12.1313 29.3466 11.4478C30.3163 12.5089 31.5933 13.2407 32.9992 13.541ZM26.1952 6.78714C26.1623 6.59939 26.1371 6.41037 26.1196 6.22057V5.58597H21.154V25.2936C21.1461 27.5909 19.2807 29.4511 16.9801 29.4511C16.3045 29.4511 15.6669 29.291 15.1021 29.0061C15.8648 30.0065 17.0692 30.6523 18.4248 30.6523C20.7251 30.6523 22.5908 28.7921 22.599 26.4946V6.78714H26.1952ZM18.2477 17.3767L18.247 16.2586C17.832 16.2019 17.4137 16.1736 16.9949 16.1738C11.955 16.1738 7.86963 20.2571 7.86963 25.2936C7.86963 28.4514 9.47601 31.2345 11.9159 32.8715C10.3067 31.2274 9.31514 28.9771 9.31514 26.4948C9.31514 21.5222 13.2969 17.479 18.2477 17.3767Z"
+                        fill="currentColor"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
 
     <script>
+        // Particle Background
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = `rgba(123, 44, 191, ${Math.random() * 0.5})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = "#7b2cbf";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Upgrade Logic
         const upgrades = [
             {
                 fact: "You don't need more information. You need more silence.",
@@ -374,11 +582,9 @@
             const btnText = document.getElementById('btnText');
             const initialCard = document.getElementById('initialCard');
             const finalStage = document.getElementById('finalStage');
-            const footer = document.getElementById('pageFooter');
 
             btn.disabled = true;
 
-            // Fade out current text
             factText.classList.remove('show');
             factText.classList.add('hide');
             upgradeText.classList.remove('show');
@@ -388,7 +594,6 @@
                 revealCount++;
 
                 if (revealCount <= 2) {
-                    // --- NORMAL REVEAL ---
                     const data = getRandomUpgrade();
                     factText.innerHTML = data.fact;
                     upgradeText.innerHTML = `<span style="color:var(--accent-sparkle); font-weight:700; text-transform:uppercase; letter-spacing:2px; font-size:0.9rem;">Upgrade:</span><br>${data.upgrade}`;
@@ -402,21 +607,12 @@
                     btnText.textContent = 'Reveal More';
                     btn.disabled = false;
                 } else {
-                    // --- FINAL TRANSFORMATION (Split View) ---
-
-                    // 1. Fade Out Initial Card
                     initialCard.classList.add('fade-out');
-
-                    // 2. Fade In Final Stage
                     finalStage.classList.add('visible');
-
-                    // 3. Show Footer
-                    footer.classList.add('visible');
                 }
             }, 500);
         }
 
-        // Initial Fade In
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('factText').classList.add('show');
