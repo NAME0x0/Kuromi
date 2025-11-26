@@ -32,12 +32,23 @@
             background: radial-gradient(circle at center, #1a0b2e 0%, #050505 100%);
             color: var(--text-primary);
             min-height: 100vh;
+            min-height: 100dvh; /* dynamic viewport height for mobile */
+            display: grid;
+            place-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Main content wrapper - centered by grid */
+        .content-wrapper {
+            width: 90%;
+            max-width: 1200px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            position: relative;
+            padding: 20px;
+            z-index: 10;
         }
 
         /* Particle Background */
@@ -51,12 +62,41 @@
             pointer-events: none;
         }
 
+        /* External Title */
+        .page-title {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent-sparkle) 0%, white 50%, var(--accent-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            width: 90%;
+            max-width: 500px;
+            opacity: 0;
+            transition: opacity 1s ease;
+            z-index: 10;
+        }
+
+        .page-title.visible {
+            opacity: 1;
+        }
+
+        /* Group wrapper to center title + content as one unit */
+        .centered-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
         /* Initial Stage */
         .initial-stage {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             width: 90%;
             max-width: 500px;
             min-height: 400px;
@@ -77,7 +117,7 @@
 
         .initial-stage.fade-out {
             opacity: 0;
-            transform: translate(-50%, -60%);
+            transform: translateY(-20px);
             pointer-events: none;
         }
 
@@ -195,18 +235,20 @@
             box-shadow: 0 15px 40px rgba(123, 44, 191, 0.5), 0 0 20px var(--accent-glow);
         }
 
-        /* Final Stage Split View */
+        /* Final Stage - Two Container Layout */
         .final-stage {
-            display: flex;
-            width: 90%;
-            max-width: 1200px;
-            height: 80vh;
-            gap: 2rem;
+            width: 100%;
+            max-width: 1000px;
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
             pointer-events: none;
             z-index: 10;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            justify-items: center;
+            align-items: stretch;
         }
 
         .final-stage.visible {
@@ -215,126 +257,120 @@
             pointer-events: auto;
         }
 
-        /* Left: Profile Container */
-        .profile-container {
-            flex: 1;
-            background-image: url('assets/Space.jpg');
-            background-size: cover;
-            background-position: center;
+        /* Image Container */
+        .image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
             border-radius: 20px;
             border: 1px solid var(--glass-border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            padding: 40px 20px;
-            text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-            font-family: 'Montserrat', sans-serif;
         }
 
-        .header-top,
-        .header-bottom {
-            font-weight: 500;
-            font-size: 12px;
-            letter-spacing: 0.2em;
-            color: #e0e0e0;
-            text-transform: uppercase;
-            margin: 10px 0;
-        }
-
-        .header-main {
-            font-weight: 900;
-            font-size: clamp(30px, 5vw, 60px);
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
-            margin: 0;
-            line-height: 1;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .avatar-section {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .avatar {
-            width: 200px;
-            height: 200px;
+        .final-image {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
         }
 
-        .footer-section {
-            font-weight: 500;
-            font-size: 16px;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            width: 80%;
+        /* Use landscape image on all devices */
+        .final-image.portrait {
+            display: none;
         }
 
-        /* Right: Link Container */
+        .final-image.landscape {
+            display: block;
+        }
+
+        /* Links Container - matches image container style */
         .link-container {
-            flex: 1;
+            width: 100%;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 3rem;
+            gap: 1.5rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
 
         .link-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            margin-bottom: 2rem;
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin: 0;
         }
 
         .spotify-link,
         .insta-link {
             font-family: 'Syncopate', sans-serif;
-            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             color: var(--accent-sparkle);
             text-decoration: none;
-            border-bottom: 2px solid var(--accent-sparkle);
-            padding-bottom: 5px;
+            border-bottom: 1px solid var(--accent-sparkle);
+            padding-bottom: 2px;
             transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .spotify-link {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .insta-link {
-            font-size: 1.2rem;
         }
 
         .spotify-link:hover,
         .insta-link:hover {
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 0 2px 10px rgba(224, 170, 255, 0.4);
+        }
+
+        .link-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.2rem;
+            text-decoration: none;
             color: white;
-            border-color: white;
-            text-shadow: 0 0 20px var(--accent-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-sparkle);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(123, 44, 191, 0.3);
+        }
+
+        .link-title {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-sparkle);
+        }
+
+        .link-description {
+            font-family: 'Jost', sans-serif;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
         }
 
         /* Persistent Footer - Always Visible */
         .page-footer {
-            position: absolute;
+            position: fixed;
             bottom: 20px;
             width: 100%;
             display: flex;
@@ -351,6 +387,12 @@
             letter-spacing: 2px;
             color: rgba(255, 255, 255, 0.5);
             margin-bottom: 10px;
+            transition: opacity 0.5s ease;
+        }
+
+        .footer-text.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .social-icons {
@@ -375,21 +417,149 @@
             transform: scale(1.1);
         }
 
-        /* Mobile */
+        /* Mobile-First Responsive Design */
         @media (max-width: 900px) {
-            .final-stage {
-                flex-direction: column;
-                height: auto;
-                padding-bottom: 100px;
+            body {
+                min-height: 100vh;
+                min-height: 100dvh;
+                padding-bottom: 70px; /* space for footer */
             }
 
-            .profile-container,
-            .link-container {
-                min-height: 400px;
+            .content-wrapper {
+                width: 100%;
+                max-width: 100%;
+                padding: 20px 16px;
+            }
+
+            .final-stage {
+                grid-template-columns: 1fr;
+                gap: 1.5rem; /* gap between stacked containers */
+            }
+
+            /* Equal-sized containers on mobile */
+            .final-stage .image-container,
+            .final-stage .link-container {
+                width: 100%;
+                max-width: 400px;
+                aspect-ratio: 4 / 3; /* same shape for both */
+            }
+
+            .final-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
 
             .page-footer {
                 bottom: 10px;
+            }
+
+            .page-title {
+                font-size: clamp(1rem, 5vw, 1.5rem);
+                margin-top: 0;
+                margin-bottom: 1rem;
+            }
+
+            .initial-stage {
+                padding: 1.5rem;
+                min-height: 350px;
+            }
+
+            .fact-text {
+                font-size: 1.5rem;
+            }
+
+            .upgrade-text {
+                font-size: 1rem;
+            }
+
+            .liquid-btn {
+                padding: 1.2rem 3rem;
+                font-size: 0.85rem;
+            }
+
+            .link-container {
+                padding: 1.5rem;
+            }
+
+            .link-title {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Desktop/Laptop - Side by Side Layout */
+        @media (min-width: 901px) {
+            body {
+                padding-bottom: 60px; /* space for footer */
+            }
+
+            .content-wrapper {
+                padding: 20px;
+            }
+
+            .page-title {
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+            }
+
+            .final-stage {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+                max-width: 1000px;
+            }
+
+            /* Equal-sized containers on desktop */
+            .final-stage .image-container,
+            .final-stage .link-container {
+                width: 100%;
+                height: 350px; /* fixed equal height */
+            }
+
+            .final-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        /* Extra small mobile optimization */
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: clamp(0.9rem, 6vw, 1.3rem);
+                letter-spacing: 2px;
+            }
+
+            .fact-text {
+                font-size: 1.3rem;
+            }
+
+            .initial-stage {
+                padding: 1.2rem;
+                min-height: 280px;
+            }
+
+            .liquid-btn {
+                padding: 1rem 2.5rem;
+                font-size: 0.75rem;
+            }
+
+            /* Smaller containers on very small screens */
+            .final-stage .image-container,
+            .final-stage .link-container {
+                max-width: 320px;
+                aspect-ratio: 4 / 3;
+            }
+
+            .link-container {
+                padding: 1.2rem;
+            }
+
+            .link-title {
+                font-size: 1rem;
+            }
+
+            .link-item {
+                padding: 1rem;
             }
         }
     </style>
@@ -399,46 +569,47 @@
 
     <canvas id="particle-canvas"></canvas>
 
-    <!-- Initial State -->
-    <div class="initial-stage" id="initialCard">
-        <p class="fact-text" id="factText">INITIALIZING SYSTEM...<br>READY FOR UPGRADE.</p>
-        <div id="upgradeText" class="upgrade-text" style="display: none;"></div>
+    <div class="content-wrapper">
+        <!-- Centered Group: title + content as one unit -->
+        <div class="centered-group">
+            <!-- External Title -->
+            <h1 class="page-title" id="pageTitle">BECOME A FUTUREHUMAN NOW</h1>
 
-        <button class="liquid-btn" id="revealBtn" onclick="revealUpgrade()">
-            <span id="btnText">Reveal More</span>
-        </button>
-    </div>
+            <!-- Initial State -->
+            <div class="initial-stage" id="initialCard">
+                <p class="fact-text" id="factText">INITIALIZING SYSTEM...<br>READY FOR UPGRADE.</p>
+                <div id="upgradeText" class="upgrade-text" style="display: none;"></div>
 
-    <!-- Final State -->
-    <div class="final-stage" id="finalStage">
-        <div class="profile-container">
-            <div class="header-section">
-                <div class="header-top">Briar Prestidge Presents</div>
-                <h1 class="header-main">Hyperscale</h1>
-                <div class="header-bottom">Podcast of the Future</div>
+                <button class="liquid-btn" id="revealBtn" onclick="revealUpgrade()">
+                    <span id="btnText">Reveal More</span>
+                </button>
             </div>
 
-            <div class="avatar-section">
-                <img src="assets/Avatar.jpg" alt="Briar Prestidge" class="avatar">
-            </div>
+            <!-- Final State -->
+            <div class="final-stage" id="finalStage">
+                <!-- Image Container -->
+                <div class="image-container">
+                    <!-- Portrait for Desktop/Laptop (wider screens) -->
+                    <img src="assets\Final_Portrait.jpg" alt="Futurehuman" class="final-image portrait">
+                    <!-- Landscape for Mobile (taller screens) -->
+                    <img src="assets\Final_Landscape.jpg" alt="Futurehuman" class="final-image landscape">
+                </div>
 
-            <div class="footer-section">
-                Briar Prestidge
+                <!-- Links Container -->
+                <div class="link-container">
+                    <h2 class="link-title">Want to know how to upgrade yourself further?</h2>
+                    <!--Hyperscale Podcast Link-->
+                    <a href="https://open.spotify.com/show/0ysR06vv6dFCBrggJkixZI?si=6a6fdb4e1a954b7a&nd=1&dlsi=ae11d7268610400a" target="_blank" class="spotify-link">FOLLOW HYPERSCALE</a>
+                    <!--Instagram Link-->
+                    <a href="https://www.instagram.com/briar_prestidge/" target="_blank" class="insta-link">FOLLOW BRIAR PRESTIDGE</a>
+                </div>
             </div>
-        </div>
-
-        <div class="link-container">
-            <h2 class="link-title">Want to know how to upgrade yourself further?</h2>
-            <a href="https://open.spotify.com/show/0ysR06vv6dFCBrggJkixZI?si=6a6fdb4e1a954b7a&nd=1&dlsi=ae11d7268610400a"
-                target="_blank" class="spotify-link">FOLLOW HYPERSCALE</a>
-            <a href="https://www.instagram.com/briar_prestidge/" target="_blank" class="insta-link">FOLLOW
-                @BRIAR_PRESTIDGE</a>
         </div>
     </div>
 
     <!-- Persistent Footer -->
     <div class="page-footer">
-        <div class="footer-text">FOLLOW FOR MORE:</div>
+        <div class="footer-text" id="footerText">FOLLOW FOR MORE:</div>
         <div class="social-icons">
             <a href="https://briarprestidge.komi.io" target="_blank" class="social-btn">
                 <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -581,6 +752,7 @@
             const btnText = document.getElementById('btnText');
             const initialCard = document.getElementById('initialCard');
             const finalStage = document.getElementById('finalStage');
+            const footerText = document.getElementById('footerText');
 
             btn.disabled = true;
 
@@ -608,6 +780,8 @@
                 } else {
                     initialCard.classList.add('fade-out');
                     finalStage.classList.add('visible');
+                    // Hide footer text when final stage is visible
+                    footerText.classList.add('hidden');
                 }
             }, 500);
         }
@@ -615,6 +789,7 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('factText').classList.add('show');
+                document.getElementById('pageTitle').classList.add('visible');
             }, 500);
         });
     </script>
