@@ -470,7 +470,6 @@
         ];
 
         let step = 0;
-        let used = [];
 
         const msgEl = document.getElementById('msg');
         const hintEl = document.getElementById('hint');
@@ -480,11 +479,8 @@
         const finalStage = document.getElementById('finalStage');
         const footerLabel = document.getElementById('footerLabel');
 
-        function pickUpgrade() {
-            if (used.length >= upgrades.length) used = [];
-            let i;
-            do { i = Math.floor(Math.random() * upgrades.length); } while (used.includes(i));
-            used.push(i);
+        function pickRandomUpgrade() {
+            const i = Math.floor(Math.random() * upgrades.length);
             return upgrades[i];
         }
 
@@ -503,8 +499,9 @@
             setTimeout(() => {
                 step++;
                 
-                if (step <= 2) {
-                    const data = pickUpgrade();
+                if (step === 1) {
+                    // First click: show one random fortune
+                    const data = pickRandomUpgrade();
                     msgEl.textContent = data.msg;
                     hintText.textContent = data.hint;
                     hintEl.hidden = false;
@@ -513,6 +510,7 @@
                     animate(hintEl, false);
                     cta.disabled = false;
                 } else {
+                    // Second click: show final stage
                     initCard.classList.add('hidden');
                     finalStage.classList.add('visible');
                     footerLabel.classList.add('hidden');
