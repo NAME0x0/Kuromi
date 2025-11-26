@@ -1,798 +1,507 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>UPGRADE TO YOUR FUTURE</title>
     <meta name="description" content="Upgrade your future. One signal at a time.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;900&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
+        :root {
+            --bg-deep: #050505;
+            --bg-glow: #1a0b2e;
+            --accent: #7b2cbf;
+            --accent-light: #e0aaff;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --radius: clamp(16px, 4vw, 24px);
+            --space: clamp(1rem, 4vw, 2rem);
+        }
+
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --bg-core: #050505;
-            --accent-glow: #7b2cbf;
-            --accent-sparkle: #e0aaff;
-            --text-primary: #ffffff;
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-bg: rgba(255, 255, 255, 0.03);
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Jost', sans-serif;
-            background: radial-gradient(circle at center, #1a0b2e 0%, #050505 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            min-height: 100dvh; /* dynamic viewport height for mobile */
+            font-family: 'Jost', system-ui, sans-serif;
+            background: var(--bg-deep);
+            color: var(--white);
+            min-height: 100dvh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated gradient background */
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% 0%, var(--bg-glow) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(123, 44, 191, 0.15) 0%, transparent 50%),
+                var(--bg-deep);
+            z-index: -2;
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            top: 10%;
+            left: -5%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent-light);
+            bottom: 20%;
+            right: -3%;
+            animation-delay: -7s;
+        }
+        .orb-3 {
+            width: 150px;
+            height: 150px;
+            background: var(--accent);
+            top: 60%;
+            left: 30%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -20px) scale(1.05); }
+            50% { transform: translate(-20px, 30px) scale(0.95); }
+            75% { transform: translate(20px, 20px) scale(1.02); }
+        }
+
+        /* Main layout */
+        main {
             display: grid;
             place-items: center;
-            overflow-x: hidden;
-            position: relative;
+            min-height: 100dvh;
+            padding: var(--space);
+            padding-bottom: calc(var(--space) + 80px);
         }
 
-        /* Main content wrapper - centered by grid */
-        .content-wrapper {
-            width: 90%;
-            max-width: 1200px;
+        .scene {
+            width: 100%;
+            max-width: 900px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 10;
+            gap: var(--space);
         }
 
-        /* Particle Background */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* External Title */
-        .page-title {
+        /* Title */
+        .headline {
             font-family: 'Syncopate', sans-serif;
+            font-size: clamp(0.85rem, 3.5vw, 1.5rem);
             font-weight: 700;
-            font-size: clamp(1.2rem, 4vw, 2rem);
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 0.15em;
             text-align: center;
-            background: linear-gradient(135deg, var(--accent-sparkle) 0%, white 50%, var(--accent-glow) 100%);
+            background: linear-gradient(135deg, var(--accent-light), var(--white), var(--accent));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1.5rem;
-            width: 90%;
-            max-width: 500px;
             opacity: 0;
-            transition: opacity 1s ease;
-            z-index: 10;
+            transform: translateY(-10px);
+            animation: fadeIn 1s ease 0.3s forwards;
         }
 
-        .page-title.visible {
-            opacity: 1;
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Group wrapper to center title + content as one unit */
-        .centered-group {
+        /* Card base */
+        .card {
+            width: 100%;
+            max-width: 480px;
+            background: var(--glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: clamp(1.5rem, 5vw, 2.5rem);
+            box-shadow: 
+                0 4px 24px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        /* Initial card */
+        #initCard {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            text-align: center;
+            gap: 1.5rem;
+        }
+
+        #initCard.hidden {
+            opacity: 0;
+            transform: scale(0.95) translateY(-20px);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .message {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.25rem, 4vw, 1.75rem);
+            line-height: 1.5;
+            min-height: 3em;
+        }
+
+        .upgrade-hint {
+            font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+            color: rgba(255, 255, 255, 0.7);
+            border-top: 1px solid var(--glass-border);
+            padding-top: 1.25rem;
             width: 100%;
         }
 
-        /* Initial Stage */
-        .initial-stage {
-            width: 90%;
-            max-width: 500px;
-            min-height: 400px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
+        .upgrade-hint strong {
+            display: block;
+            color: var(--accent-light);
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        /* CTA Button */
+        .cta {
+            position: relative;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            z-index: 10;
-            padding: 2rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        .initial-stage.fade-out {
-            opacity: 0;
-            transform: translateY(-20px);
-            pointer-events: none;
-        }
-
-        .fact-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            line-height: 1.4;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.5s ease;
-        }
-
-        .upgrade-text {
-            font-family: 'Jost', sans-serif;
-            font-size: 1.2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1.5rem;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.5s ease 0.1s;
-        }
-
-        .show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hide {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        /* Button with Glitter */
-        .liquid-btn {
-            position: relative;
-            padding: 1.5rem 4rem;
+            padding: 1rem 2.5rem;
             font-family: 'Syncopate', sans-serif;
+            font-size: clamp(0.65rem, 2vw, 0.8rem);
             font-weight: 700;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
+            color: var(--white);
+            background: linear-gradient(135deg, rgba(123, 44, 191, 0.3), rgba(224, 170, 255, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 100px;
             cursor: pointer;
             overflow: hidden;
-            transition: all 0.4s ease;
-            margin-top: 2rem;
-            box-shadow: inset 0 4px 15px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(123, 44, 191, 0.3);
+            transition: all 0.3s ease;
         }
 
-        /* Animated Glitter Stars */
-        .liquid-btn::before {
+        .cta::before {
             content: '';
             position: absolute;
             inset: 0;
-            background:
-                radial-gradient(circle at 20% 30%, white 1px, transparent 1px),
-                radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.8) 1.5px, transparent 1.5px),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
-                radial-gradient(circle at 40% 80%, white 2px, transparent 2px),
-                radial-gradient(circle at 90% 50%, rgba(255, 255, 255, 0.7) 1px, transparent 1px),
-                radial-gradient(circle at 15% 60%, rgba(255, 255, 255, 0.5) 1.5px, transparent 1.5px);
-            background-size: 100% 100%;
-            animation: glitterPulse 2s ease-in-out infinite, glitterMove 8s linear infinite;
-            pointer-events: none;
-            opacity: 0.6;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta span {
+            position: relative;
             z-index: 1;
         }
 
-        @keyframes glitterPulse {
-
-            0%,
-            100% {
-                opacity: 0.3;
-            }
-
-            50% {
-                opacity: 0.9;
-            }
-        }
-
-        @keyframes glitterMove {
-            0% {
-                transform: translate(0, 0);
-            }
-
-            25% {
-                transform: translate(5px, -3px);
-            }
-
-            50% {
-                transform: translate(-2px, 4px);
-            }
-
-            75% {
-                transform: translate(3px, -5px);
-            }
-
-            100% {
-                transform: translate(0, 0);
-            }
-        }
-
-        .liquid-btn span {
-            position: relative;
-            z-index: 2;
-        }
-
-        .liquid-btn:hover {
+        .cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(123, 44, 191, 0.5), 0 0 20px var(--accent-glow);
+            box-shadow: 0 8px 32px rgba(123, 44, 191, 0.4);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
-        /* Final Stage - Two Container Layout */
-        .final-stage {
+        .cta:hover::before {
+            opacity: 0.2;
+        }
+
+        .cta:active {
+            transform: translateY(0);
+        }
+
+        /* Final stage */
+        #finalStage {
+            display: none;
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
+            gap: var(--space);
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
-            pointer-events: none;
-            z-index: 10;
+        }
+
+        #finalStage.visible {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1.5rem;
-            justify-items: center;
-            align-items: stretch;
+            animation: slideUp 0.8s ease 0.2s forwards;
         }
 
-        .final-stage.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Image Container */
-        .image-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Both containers equal */
+        .panel {
+            border-radius: var(--radius);
             overflow: hidden;
-            border-radius: 20px;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         }
 
-        .final-image {
+        .panel-image {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+        }
+
+        .panel-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 20px;
-        }
-
-        /* Use landscape image on all devices */
-        .final-image.portrait {
-            display: none;
-        }
-
-        .final-image.landscape {
             display: block;
         }
 
-        /* Links Container - matches image container style */
-        .link-container {
-            width: 100%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
+        .panel-links {
+            aspect-ratio: 16 / 10;
+            background: var(--glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1.5rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            gap: clamp(1rem, 3vw, 1.5rem);
+            padding: var(--space);
             text-align: center;
         }
 
-        .link-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
+        .panel-links h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1rem, 3vw, 1.4rem);
             font-weight: 400;
-            color: var(--text-primary);
-            line-height: 1.5;
-            margin: 0;
-        }
-
-        .spotify-link,
-        .insta-link {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--accent-sparkle);
-            text-decoration: none;
-            border-bottom: 1px solid var(--accent-sparkle);
-            padding-bottom: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .spotify-link:hover,
-        .insta-link:hover {
-            color: #fff;
-            border-color: #fff;
-            box-shadow: 0 2px 10px rgba(224, 170, 255, 0.4);
-        }
-
-        .link-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 1.2rem;
-            text-decoration: none;
-            color: white;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .link-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--accent-sparkle);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(123, 44, 191, 0.3);
-        }
-
-        .link-title {
-            font-family: 'Syncopate', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-sparkle);
-        }
-
-        .link-description {
-            font-family: 'Jost', sans-serif;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
             line-height: 1.4;
+            max-width: 280px;
         }
 
-        /* Persistent Footer - Always Visible */
-        .page-footer {
+        .link {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(0.6rem, 2vw, 0.75rem);
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            text-decoration: none;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--accent-light);
+            transition: all 0.3s ease;
+        }
+
+        .link:hover {
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        /* Desktop: side by side */
+        @media (min-width: 700px) {
+            #finalStage.visible {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .panel-image,
+            .panel-links {
+                aspect-ratio: 4 / 3;
+            }
+        }
+
+        /* Footer */
+        footer {
             position: fixed;
-            bottom: 20px;
-            width: 100%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            z-index: 100;
-            pointer-events: auto;
+            gap: 0.5rem;
+            z-index: 50;
         }
 
-        .footer-text {
-            font-size: 0.8rem;
+        .footer-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.4);
             transition: opacity 0.5s ease;
         }
 
-        .footer-text.hidden {
+        .footer-label.hidden {
             opacity: 0;
-            pointer-events: none;
         }
 
-        .social-icons {
+        .socials {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
+        }
+
+        .socials a {
+            display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .social-btn {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            color: rgba(255, 255, 255, 0.5);
             transition: color 0.3s ease, transform 0.3s ease;
-            padding: 0;
-            text-decoration: none;
         }
 
-        .social-btn:hover {
-            color: white;
-            transform: scale(1.1);
+        .socials a:hover {
+            color: var(--white);
+            transform: translateY(-2px);
         }
 
-        /* Mobile-First Responsive Design */
-        @media (max-width: 900px) {
-            body {
-                min-height: 100vh;
-                min-height: 100dvh;
-                padding-bottom: 70px; /* space for footer */
-            }
-
-            .content-wrapper {
-                width: 100%;
-                max-width: 100%;
-                padding: 20px 16px;
-            }
-
-            .final-stage {
-                grid-template-columns: 1fr;
-                gap: 1.5rem; /* gap between stacked containers */
-            }
-
-            /* Equal-sized containers on mobile */
-            .final-stage .image-container,
-            .final-stage .link-container {
-                width: 100%;
-                max-width: 400px;
-                aspect-ratio: 4 / 3; /* same shape for both */
-            }
-
-            .final-image {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .page-footer {
-                bottom: 10px;
-            }
-
-            .page-title {
-                font-size: clamp(1rem, 5vw, 1.5rem);
-                margin-top: 0;
-                margin-bottom: 1rem;
-            }
-
-            .initial-stage {
-                padding: 1.5rem;
-                min-height: 350px;
-            }
-
-            .fact-text {
-                font-size: 1.5rem;
-            }
-
-            .upgrade-text {
-                font-size: 1rem;
-            }
-
-            .liquid-btn {
-                padding: 1.2rem 3rem;
-                font-size: 0.85rem;
-            }
-
-            .link-container {
-                padding: 1.5rem;
-            }
-
-            .link-title {
-                font-size: 0.9rem;
-            }
-        }
-
-        /* Desktop/Laptop - Side by Side Layout */
-        @media (min-width: 901px) {
-            body {
-                padding-bottom: 60px; /* space for footer */
-            }
-
-            .content-wrapper {
-                padding: 20px;
-            }
-
-            .page-title {
-                margin-top: 0;
-                margin-bottom: 1.5rem;
-            }
-
-            .final-stage {
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
-                max-width: 1000px;
-            }
-
-            /* Equal-sized containers on desktop */
-            .final-stage .image-container,
-            .final-stage .link-container {
-                width: 100%;
-                height: 350px; /* fixed equal height */
-            }
-
-            .final-image {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-        }
-
-        /* Extra small mobile optimization */
-        @media (max-width: 480px) {
-            .page-title {
-                font-size: clamp(0.9rem, 6vw, 1.3rem);
-                letter-spacing: 2px;
-            }
-
-            .fact-text {
-                font-size: 1.3rem;
-            }
-
-            .initial-stage {
-                padding: 1.2rem;
-                min-height: 280px;
-            }
-
-            .liquid-btn {
-                padding: 1rem 2.5rem;
-                font-size: 0.75rem;
-            }
-
-            /* Smaller containers on very small screens */
-            .final-stage .image-container,
-            .final-stage .link-container {
-                max-width: 320px;
-                aspect-ratio: 4 / 3;
-            }
-
-            .link-container {
-                padding: 1.2rem;
-            }
-
-            .link-title {
-                font-size: 1rem;
-            }
-
-            .link-item {
-                padding: 1rem;
-            }
+        .socials svg {
+            width: 20px;
+            height: 20px;
         }
     </style>
 </head>
-
 <body>
+    <!-- Background layers -->
+    <div class="bg-layer"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-    <canvas id="particle-canvas"></canvas>
+    <main>
+        <section class="scene">
+            <h1 class="headline">Become a Futurehuman Now</h1>
 
-    <div class="content-wrapper">
-        <!-- Centered Group: title + content as one unit -->
-        <div class="centered-group">
-            <!-- External Title -->
-            <h1 class="page-title" id="pageTitle">BECOME A FUTUREHUMAN NOW</h1>
-
-            <!-- Initial State -->
-            <div class="initial-stage" id="initialCard">
-                <p class="fact-text" id="factText">INITIALIZING SYSTEM...<br>READY FOR UPGRADE.</p>
-                <div id="upgradeText" class="upgrade-text" style="display: none;"></div>
-
-                <button class="liquid-btn" id="revealBtn" onclick="revealUpgrade()">
-                    <span id="btnText">Reveal More</span>
+            <!-- Initial Card -->
+            <article class="card" id="initCard">
+                <p class="message" id="msg">Initializing system...<br>Ready for upgrade.</p>
+                <div class="upgrade-hint" id="hint" hidden>
+                    <strong>Upgrade</strong>
+                    <span id="hintText"></span>
+                </div>
+                <button class="cta" id="cta" type="button">
+                    <span>Reveal More</span>
                 </button>
-            </div>
+            </article>
 
-            <!-- Final State -->
-            <div class="final-stage" id="finalStage">
-                <!-- Image Container -->
-                <div class="image-container">
-                    <!-- Portrait for Desktop/Laptop (wider screens) -->
-                    <img src="assets\Final_Portrait.jpg" alt="Futurehuman" class="final-image portrait">
-                    <!-- Landscape for Mobile (taller screens) -->
-                    <img src="assets\Final_Landscape.jpg" alt="Futurehuman" class="final-image landscape">
+            <!-- Final Stage -->
+            <div id="finalStage">
+                <div class="panel panel-image">
+                    <img src="assets/Final_Landscape.jpg" alt="Futurehuman" loading="eager">
                 </div>
-
-                <!-- Links Container -->
-                <div class="link-container">
-                    <h2 class="link-title">Want to know how to upgrade yourself further?</h2>
-                    <!--Hyperscale Podcast Link-->
-                    <a href="https://open.spotify.com/show/0ysR06vv6dFCBrggJkixZI?si=6a6fdb4e1a954b7a&nd=1&dlsi=ae11d7268610400a" target="_blank" class="spotify-link">FOLLOW HYPERSCALE</a>
-                    <!--Instagram Link-->
-                    <a href="https://www.instagram.com/briar_prestidge/" target="_blank" class="insta-link">FOLLOW BRIAR PRESTIDGE</a>
+                <div class="panel panel-links">
+                    <h2>Want to know how to upgrade yourself further?</h2>
+                    <a href="https://open.spotify.com/show/0ysR06vv6dFCBrggJkixZI?si=6a6fdb4e1a954b7a" target="_blank" rel="noopener" class="link">Follow Hyperscale</a>
+                    <a href="https://www.instagram.com/briar_prestidge/" target="_blank" rel="noopener" class="link">Follow Briar Prestidge</a>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <!-- Persistent Footer -->
-    <div class="page-footer">
-        <div class="footer-text" id="footerText">FOLLOW FOR MORE:</div>
-        <div class="social-icons">
-            <a href="https://briarprestidge.komi.io" target="_blank" class="social-btn">
-                <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M20 6.66687C17.3629 6.66687 14.785 7.44886 12.5924 8.91394C10.3997 10.379 8.69074 12.4614 7.68157 14.8978C6.6724 17.3341 6.40836 20.015 6.92283 22.6014C7.4373 25.1878 8.70717 27.5636 10.5719 29.4283C12.4366 31.293 14.8123 32.5629 17.3988 33.0773C19.9852 33.5918 22.6661 33.3278 25.1024 32.3186C27.5387 31.3094 29.6211 29.6005 31.0862 27.4078C32.5513 25.2151 33.3333 22.6373 33.3333 20.0002C33.3295 16.4652 31.9235 13.076 29.4238 10.5763C26.9242 8.07668 23.535 6.67069 20 6.66687V6.66687ZM20 31.1113C18.5236 31.1121 17.0619 30.8176 15.701 30.2451C14.3401 29.6727 13.1074 28.8339 12.0755 27.778L13.6922 26.4202C13.8563 26.2822 13.977 26.0997 14.0397 25.8946C14.1024 25.6896 14.1044 25.4708 14.0455 25.2646L13.2677 22.518C13.2189 22.3485 13.131 22.1929 13.0111 22.0635L11.6377 20.5958L11.43 20.2413L12.1411 19.6335L14.9044 18.2358C15.0631 18.1555 15.2002 18.0383 15.3042 17.8941C15.4083 17.7499 15.4761 17.5828 15.5022 17.4069L15.9466 14.3624C15.9715 14.1982 15.9593 14.0306 15.9108 13.8717C15.8623 13.7129 15.7789 13.567 15.6666 13.4446L13.8344 11.4891C13.8021 11.4536 13.7672 11.4205 13.73 11.3902L13.3766 11.1002C15.1606 9.76623 17.3065 9.00352 19.5322 8.91242L20.03 9.7402L20.6811 11.6435C20.7497 11.8418 20.8725 12.0169 21.0355 12.1491L23.5733 14.1902C23.7707 14.3491 24.0165 14.4357 24.27 14.4358C24.3138 14.4359 24.3576 14.4333 24.4011 14.428L27.7344 14.0324C27.8809 14.0147 28.0225 13.9682 28.1511 13.8958L28.9488 13.4424C30.167 15.0955 30.9022 17.0542 31.0727 19.1005C31.2432 21.1468 30.8422 23.2003 29.9144 25.0321C28.9867 26.864 27.5685 28.4022 25.818 29.4756C24.0675 30.5489 22.0533 31.1152 20 31.1113Z"
-                        fill="currentColor"></path>
-                    <path
-                        d="M28.7711 20.4904L27.51 18.0704C27.4365 17.9291 27.3335 17.8053 27.2079 17.7073C27.0823 17.6094 26.9372 17.5395 26.7823 17.5026L24.1634 16.8759C23.9556 16.8262 23.738 16.8378 23.5367 16.9093L21.0623 17.7781C20.8653 17.8469 20.6916 17.9697 20.5611 18.1326L19.0745 20.3248C18.916 20.6449 18.8869 21.0138 18.9934 21.3548L19.8956 23.6459L19.34 25.5559C19.3012 25.7178 19.2999 25.8864 19.3361 26.049C19.3723 26.2115 19.4451 26.3636 19.5489 26.4937L20.2789 28.4215C20.3832 28.548 20.5142 28.6499 20.6625 28.7198C20.8108 28.7897 20.9727 28.826 21.1367 28.8259H21.2078L23.8067 28.6592C24.063 28.6427 24.3056 28.5379 24.4934 28.3626L26.4511 26.5392C26.5609 26.4375 26.6489 26.3147 26.71 26.1781L28.8011 21.4559C28.8691 21.3031 28.9018 21.1369 28.8966 20.9697C28.8914 20.8025 28.8485 20.6387 28.7711 20.4904Z"
-                        fill="currentColor"></path>
-                </svg>
+    <!-- Footer -->
+    <footer>
+        <span class="footer-label" id="footerLabel">Follow for more</span>
+        <nav class="socials">
+            <a href="https://briarprestidge.komi.io" target="_blank" rel="noopener" aria-label="Komi">
+                <svg viewBox="0 0 40 40" fill="currentColor"><path d="M20 6.67c-7.36 0-13.33 5.97-13.33 13.33S12.64 33.33 20 33.33 33.33 27.36 33.33 20 27.36 6.67 20 6.67zm0 24.44a11.12 11.12 0 01-7.92-3.33l1.62-1.36a1 1 0 00.27-.86l-.78-2.75a1 1 0 00-.26-.48l-1.37-1.47-.21-.35.71-.61 2.76-1.4a1 1 0 00.6-.68l.44-3.04a1 1 0 00-.28-.85l-1.83-1.96-.1-.1-.36-.29a11.08 11.08 0 016.16-1.81l.5.83.65 1.9a1 1 0 00.35.51l2.54 2.04c.2.16.44.25.7.25h.13l3.33-.4a1 1 0 00.42-.15l.8-.45a11.1 11.1 0 01-4.93 15.59z"/><path d="M28.77 20.49l-1.26-2.42a1 1 0 00-.73-.55l-2.62-.63a1 1 0 00-.63.03l-2.47.87a1 1 0 00-.5.43l-1.49 2.19a1 1 0 00.08 1.22l.9 2.29-.56 1.91a1 1 0 00.42 1.08l.73 1.93a1 1 0 00.94.57h.07l2.6-.17a1 1 0 00.69-.3l1.96-1.82a1 1 0 00.26-.38l2.09-4.72a1 1 0 00-.07-.99z"/></svg>
             </a>
-            <a href="https://www.linkedin.com/in/briar-prestidge/" target="_blank" class="social-btn">
-                <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M30.5614 30.562H26.1164V23.6006C26.1164 21.9406 26.0867 19.8037 23.8045 19.8037C21.4893 19.8037 21.1351 21.6123 21.1351 23.4798V30.5616H16.6901V16.2461H20.9573V18.2025H21.017C21.4441 17.4723 22.0612 16.8716 22.8026 16.4644C23.544 16.0571 24.382 15.8587 25.2273 15.89C29.7326 15.89 30.5633 18.8535 30.5633 22.7088L30.5614 30.562ZM11.6745 14.2893C11.1644 14.2894 10.6656 14.1382 10.2414 13.8548C9.8171 13.5714 9.48641 13.1686 9.29108 12.6973C9.09576 12.226 9.04459 11.7073 9.14403 11.2069C9.24347 10.7065 9.48906 10.2468 9.84975 9.88595C10.2104 9.52512 10.67 9.27935 11.1704 9.17973C11.6707 9.0801 12.1894 9.1311 12.6608 9.32626C13.1322 9.52142 13.5351 9.85198 13.8186 10.2761C14.1021 10.7003 14.2535 11.199 14.2536 11.7092C14.2537 12.048 14.187 12.3834 14.0574 12.6964C13.9278 13.0094 13.7379 13.2938 13.4984 13.5334C13.2589 13.773 12.9746 13.9631 12.6616 14.0928C12.3487 14.2225 12.0133 14.2892 11.6745 14.2893ZM13.8971 30.562H9.44737V16.2461H13.8971V30.562ZM32.7775 5.00204H7.21374C6.63351 4.9955 6.07442 5.21958 5.65932 5.62505C5.24422 6.03053 5.00708 6.58422 5 7.16445V32.8351C5.00684 33.4156 5.24384 33.9697 5.65892 34.3756C6.074 34.7815 6.63322 35.006 7.21374 34.9998H32.7775C33.3591 35.0071 33.9199 34.7832 34.3366 34.3774C34.7534 33.9715 34.9919 33.4168 35 32.8351V7.1626C34.9917 6.58121 34.753 6.02689 34.3362 5.62143C33.9195 5.21597 33.3588 4.99252 32.7775 5.00019V5.00204Z"
-                        fill="currentColor"></path>
-                </svg>
+            <a href="https://www.linkedin.com/in/briar-prestidge/" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <svg viewBox="0 0 40 40" fill="currentColor"><path d="M30.56 30.56h-4.44v-6.96c0-1.66-.03-3.8-2.31-3.8-2.32 0-2.67 1.81-2.67 3.68v7.08h-4.45V16.25h4.27v1.96h.06c.6-1.13 2.05-2.33 4.22-2.33 4.51 0 5.34 2.97 5.34 6.82v7.86zM11.67 14.29a2.58 2.58 0 110-5.16 2.58 2.58 0 010 5.16zm2.22 16.27H9.45V16.25h4.45v14.31zM32.78 5H7.21A2.2 2.2 0 005 7.16v25.67c0 1.2.99 2.17 2.21 2.16h25.56A2.2 2.2 0 0035 32.84V7.16A2.2 2.2 0 0032.78 5z"/></svg>
             </a>
-            <a href="https://www.instagram.com/briar_prestidge/" target="_blank" class="social-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M7.71344 4.02039C7.91512 4.00366 8.95265 4 12.5002 4H15.266C17.2591 4.00346 17.3725 4.01989 17.7512 4.07472L17.7731 4.0779C18.5924 4.19606 19.2799 4.52282 19.8421 5.05975C20.1571 5.36286 20.374 5.6593 20.5694 6.05625C20.8076 6.54116 20.9246 6.99994 20.9782 7.68222C20.9897 7.82861 20.9949 10.1583 20.9949 12.4895C20.9949 14.8204 20.99 17.1544 20.9785 17.3008C20.9256 17.9722 20.8086 18.4349 20.5779 18.9107C20.1192 19.857 19.2761 20.5471 18.2579 20.8098C17.8887 20.9052 17.5547 20.9501 16.9796 20.9771C16.7744 20.9876 14.6282 20.9902 12.4821 20.9902C10.3359 20.9902 8.19104 20.9837 7.9806 20.9745C7.48393 20.951 7.09704 20.9013 6.74675 20.8111C5.73509 20.5497 4.87636 19.8491 4.42674 18.9159C4.19147 18.4284 4.08037 17.9827 4.02155 17.2742C4.00456 17.073 4.00064 16.0365 4.00064 12.4918C4.00064 12.0575 4.00047 11.6633 4.00031 11.3051C4.00004 10.6782 3.99981 10.1611 4.00064 9.73062C4.00398 7.73524 4.02021 7.62328 4.07541 7.24248C4.07635 7.23596 4.07731 7.22935 4.07828 7.22266C4.19657 6.40418 4.52333 5.71563 5.06249 5.15595C5.35853 4.84906 5.6585 4.63013 6.03885 4.44126C6.53239 4.19553 6.98542 4.08091 7.71344 4.02039ZM9.90967 6.25989C10.5789 6.22944 10.7927 6.22198 12.4966 6.22198H12.4946C14.199 6.22198 14.4121 6.22944 15.0813 6.25989C15.7492 6.29047 16.2053 6.39621 16.6053 6.55136C17.0183 6.71147 17.3673 6.92583 17.7163 7.27481C18.0653 7.62353 18.2796 7.97356 18.4404 8.38619C18.5946 8.78511 18.7005 9.241 18.7319 9.90891C18.7619 10.5781 18.7698 10.7919 18.7698 12.4958C18.7698 14.1997 18.7619 14.413 18.7319 15.0822C18.7005 15.7498 18.5946 16.2059 18.4404 16.6049C18.2796 17.0174 18.0653 17.3674 17.7163 17.7162C17.3677 18.0651 17.0182 18.28 16.6057 18.4403C16.2065 18.5954 15.7501 18.7012 15.0822 18.7317C14.413 18.7622 14.1998 18.7696 12.4958 18.7696C10.7921 18.7696 10.5784 18.7622 9.90915 18.7317C9.24138 18.7012 8.78535 18.5954 8.38618 18.4403C7.9738 18.28 7.62378 18.0651 7.27519 17.7162C6.92634 17.3674 6.71198 17.0174 6.55161 16.6048C6.39659 16.2059 6.29085 15.75 6.26013 15.0821C6.22981 14.4129 6.22223 14.1997 6.22223 12.4958C6.22223 10.7919 6.23007 10.578 6.26 9.90878C6.29006 9.24114 6.39594 8.78511 6.55147 8.38606C6.71224 7.97356 6.9266 7.62353 7.27558 7.27481C7.6243 6.92596 7.97433 6.71161 8.38696 6.55136C8.78587 6.39621 9.24177 6.29047 9.90967 6.25989ZM12.2875 7.35252C12.1606 7.35246 12.0431 7.35241 11.9338 7.35258V7.35101C10.7645 7.35232 10.5402 7.36016 9.96143 7.3863C9.34973 7.4144 9.01761 7.51635 8.79646 7.60262C8.50368 7.71659 8.29455 7.85253 8.07497 8.07211C7.85539 8.2917 7.71919 8.50082 7.60548 8.7936C7.5196 9.01475 7.41739 9.34675 7.38942 9.95844C7.35936 10.6198 7.35335 10.8174 7.35335 12.4928C7.35335 14.1682 7.35936 14.3669 7.38942 15.0282C7.41726 15.6399 7.5196 15.9719 7.60548 16.1928C7.71945 16.4857 7.85539 16.6943 8.07497 16.9139C8.29455 17.1335 8.50368 17.2694 8.79646 17.3831C9.01774 17.469 9.34973 17.5712 9.96143 17.5994C10.6228 17.6295 10.8213 17.636 12.4966 17.636C14.1717 17.636 14.3704 17.6295 15.0317 17.5994C15.6434 17.5715 15.9757 17.4695 16.1966 17.3833C16.4895 17.2695 16.698 17.1336 16.9175 16.914C17.1371 16.6946 17.2733 16.4861 17.387 16.1933C17.4729 15.9724 17.5751 15.6404 17.6031 15.0287C17.6332 14.3674 17.6397 14.1687 17.6397 12.4944C17.6397 10.82 17.6332 10.6214 17.6031 9.96001C17.5752 9.34831 17.4729 9.01632 17.387 8.79543C17.2731 8.50265 17.1371 8.29353 16.9175 8.07394C16.6981 7.85436 16.4894 7.71842 16.1966 7.60471C15.9754 7.51884 15.6434 7.41663 15.0317 7.38866C14.3702 7.35859 14.1717 7.35258 12.4966 7.35258C12.4242 7.35258 12.3545 7.35255 12.2875 7.35252ZM15.0926 9.1469C15.0926 8.73112 15.4299 8.3943 15.8455 8.3943V8.39404C16.2611 8.39404 16.5984 8.73126 16.5984 9.1469C16.5984 9.56254 16.2611 9.89976 15.8455 9.89976C15.4299 9.89976 15.0926 9.56254 15.0926 9.1469ZM9.27471 12.4958C9.27471 10.7166 10.7172 9.27401 12.4965 9.27394C14.2757 9.27394 15.7179 10.7165 15.7179 12.4958C15.7179 14.2751 14.2759 15.717 12.4966 15.717C10.7173 15.717 9.27471 14.2751 9.27471 12.4958ZM14.5879 12.4958C14.5879 11.3408 13.6515 10.4045 12.4966 10.4045C11.3415 10.4045 10.4053 11.3408 10.4053 12.4958C10.4053 13.6507 11.3415 14.5871 12.4966 14.5871C13.6515 14.5871 14.5879 13.6507 14.5879 12.4958Z"
-                        fill="currentColor"></path>
-                </svg>
+            <a href="https://www.instagram.com/briar_prestidge/" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.71 4.02c.2-.02 1.24-.02 4.79-.02h2.77c2 0 2.11.02 2.49.07.82.12 1.51.45 2.07.98.32.3.53.6.73 1 .24.48.36.94.41 1.62.01.15.02 2.48.02 4.81s0 4.67-.01 4.81c-.05.67-.17 1.13-.4 1.61-.46.95-1.3 1.64-2.32 1.9-.37.1-.7.14-1.28.17-.2.01-2.35.01-4.5.01s-4.29-.01-4.5-.02c-.5-.02-.89-.07-1.24-.16a3.34 3.34 0 01-2.29-2.29c-.15-.39-.26-.84-.32-1.55-.02-.2-.02-1.24-.02-4.74 0-.43 0-.83 0-1.19 0-.62 0-1.14 0-1.57.01-2 .02-2.11.08-2.49.12-.84.44-1.52.98-2.08.3-.31.6-.52.98-.71.5-.25.94-.36 1.67-.42zm2.2 2.24c.67-.03.88-.04 2.59-.04s1.91.01 2.58.04c.67.03 1.12.14 1.52.29.42.16.77.38 1.12.72.35.35.56.7.72 1.11.15.4.26.85.29 1.52.03.67.04.88.04 2.59s-.01 1.92-.04 2.59c-.03.67-.14 1.13-.29 1.52-.16.41-.37.77-.72 1.12a3.02 3.02 0 01-1.12.72c-.4.15-.85.26-1.52.29-.67.03-.88.03-2.59.03s-1.91 0-2.59-.03c-.67-.03-1.12-.14-1.52-.29a3.02 3.02 0 01-1.12-.72 3.02 3.02 0 01-.72-1.12c-.16-.4-.26-.85-.29-1.52-.03-.67-.04-.88-.04-2.59s.01-1.92.04-2.59c.03-.67.14-1.12.29-1.52.16-.41.37-.77.72-1.11a3.02 3.02 0 011.12-.72c.4-.15.85-.26 1.52-.29zm2.38 1.1c-.13 0-.25 0-.35 0-.64 0-.87.01-1.45.03-.61.03-1.01.13-1.33.28a2.72 2.72 0 00-1.67 2.54c0 1.67.01 1.9.03 2.48.03.61.13 1 .28 1.33a2.72 2.72 0 002.54 1.66c1.67 0 1.9 0 2.48-.03.61-.03 1.01-.13 1.33-.28a2.72 2.72 0 001.67-2.54c0-1.68-.01-1.9-.03-2.48-.03-.61-.13-1.01-.28-1.33a2.72 2.72 0 00-2.54-1.67c-.07 0-.13 0-.2 0h-.48zm2.8 1.79a.75.75 0 10.75.75.75.75 0 00-.75-.75zM12.5 9.27a3.22 3.22 0 100 6.45 3.22 3.22 0 000-6.45zm0 1.13a2.09 2.09 0 110 4.18 2.09 2.09 0 010-4.18z" clip-rule="evenodd"/></svg>
             </a>
-            <a href="https://www.youtube.com/@briar_prestidge" target="_blank" class="social-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="m10 15 5.19-3L10 9v6Zm11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44a2.34 2.34 0 0 1-1.73-1.73c-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73a14.1 14.1 0 0 1 2.65-.28c1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73Z">
-                    </path>
-                </svg>
+            <a href="https://www.youtube.com/@briar_prestidge" target="_blank" rel="noopener" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 15l5.19-3L10 9v6zm11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44a2.34 2.34 0 01-1.73-1.73c-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73a14.1 14.1 0 012.65-.28c1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
             </a>
-            <a href="https://twitter.com/briarprestidge" target="_blank" class="social-btn">
-                <svg viewBox="-3 -3 30 30" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M 13.861 10.469 L 21.148 2 L 19.42 2 L 13.095 9.354 L 8.042 2 L 2.215 2 L 9.856 13.12 L 2.215 22 L 3.941 22 L 10.621 14.235 L 15.958 22 L 21.785 22 L 13.861 10.469 Z M 11.498 13.217 L 10.723 12.11 L 4.563 3.3 L 7.216 3.3 L 12.187 10.41 L 12.96 11.517 L 19.421 20.76 L 16.77 20.76 L 11.498 13.218 L 11.498 13.217 Z"
-                        fill="currentColor"></path>
-                </svg>
+            <a href="https://twitter.com/briarprestidge" target="_blank" rel="noopener" aria-label="X/Twitter">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.86 10.47L21.15 2h-1.73l-6.32 7.35L8.04 2H2.22l7.64 11.12L2.22 22h1.72l6.69-7.77 5.33 7.77h5.83l-7.93-11.53zm-2.37 2.75l-.77-1.1L4.56 3.3h2.65l4.97 7.11.78 1.1 6.46 9.24h-2.65l-5.27-7.54z"/></svg>
             </a>
-            <a href="https://www.tiktok.com/@briarprestidge" target="_blank" class="social-btn">
-                <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M26.1205 15.2246C28.0599 16.6098 30.435 17.4249 33.0001 17.4249V13.541C31.5683 13.2363 30.3007 12.4883 29.3475 11.448C27.7162 10.4305 26.5407 8.7519 26.1962 6.78716H22.5999V26.4946C22.5918 28.7921 20.7262 30.6523 18.4258 30.6523C17.0701 30.6523 15.8658 30.0066 15.1031 29.0061C13.741 28.3191 12.807 26.9085 12.807 25.2795C12.807 22.9755 14.6756 21.1076 16.981 21.1076C17.4227 21.1076 17.8484 21.1764 18.2477 21.303V17.3767C13.2969 17.479 9.31514 21.5222 9.31514 26.4948C9.31514 28.9771 10.3067 31.2274 11.9159 32.8715C13.3678 33.8459 15.1155 34.414 16.9957 34.414C22.0351 34.414 26.1205 30.3308 26.1205 25.2938V15.2246Z"
-                        fill="currentColor"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M32.9992 13.541V12.4907C31.7079 12.4927 30.4421 12.1313 29.3466 11.4478C30.3163 12.5089 31.5933 13.2407 32.9992 13.541ZM26.1952 6.78714C26.1623 6.59939 26.1371 6.41037 26.1196 6.22057V5.58597H21.154V25.2936C21.1461 27.5909 19.2807 29.4511 16.9801 29.4511C16.3045 29.4511 15.6669 29.291 15.1021 29.0061C15.8648 30.0065 17.0692 30.6523 18.4248 30.6523C20.7251 30.6523 22.5908 28.7921 22.599 26.4946V6.78714H26.1952ZM18.2477 17.3767L18.247 16.2586C17.832 16.2019 17.4137 16.1736 16.9949 16.1738C11.955 16.1738 7.86963 20.2571 7.86963 25.2936C7.86963 28.4514 9.47601 31.2345 11.9159 32.8715C10.3067 31.2274 9.31514 28.9771 9.31514 26.4948C9.31514 21.5222 13.2969 17.479 18.2477 17.3767Z"
-                        fill="currentColor"></path>
-                </svg>
+            <a href="https://www.tiktok.com/@briarprestidge" target="_blank" rel="noopener" aria-label="TikTok">
+                <svg viewBox="0 0 40 40" fill="currentColor"><path fill-rule="evenodd" d="M26.12 15.22c1.94 1.39 4.32 2.2 6.88 2.2v-3.88a6.88 6.88 0 01-3.65-1.09c-1.63-1.02-2.8-2.7-3.15-4.67H22.6v19.7c-.01 2.3-1.87 4.16-4.17 4.16-1.36 0-2.56-.65-3.32-1.65a4.17 4.17 0 01-1.08-2.78c0-2.3 1.87-4.17 4.18-4.17.44 0 .87.07 1.27.2v-3.87c-4.95.1-8.93 4.15-8.93 9.11 0 2.48.99 4.73 2.6 6.38 1.45.97 3.2 1.54 5.08 1.54 5.04 0 9.12-4.08 9.12-9.12V15.22z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M33 13.54v-1.05c-1.3 0-2.56-.36-3.65-1.04a6.85 6.85 0 003.65 2.09zm-6.8-5.76c-.03-.18-.06-.37-.08-.57V6.59h-4.51v19.7c-.01 2.3-1.87 4.16-4.17 4.16-.63 0-1.23-.14-1.77-.4.75 1 1.94 1.65 3.3 1.65 2.3 0 4.16-1.86 4.17-4.16V7.78h2.85c.01.07.1.92.21 1.57zM18.25 17.38v-1.12c-.42-.06-.84-.09-1.26-.09-5.04 0-9.13 4.08-9.13 9.12 0 3.16 1.6 5.94 4.04 7.58-1.61-1.64-2.6-3.9-2.6-6.37 0-4.97 3.98-9.01 8.93-9.12z" clip-rule="evenodd"/></svg>
             </a>
-        </div>
-    </div>
+        </nav>
+    </footer>
 
     <script>
-        // Particle Background
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-                this.color = `rgba(123, 44, 191, ${Math.random() * 0.5})`;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = "#7b2cbf";
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < 100; i++) {
-            particles.push(new Particle());
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        // Upgrade Logic
         const upgrades = [
-            {
-                fact: "You don't need more information. You need more silence.",
-                upgrade: "Remove one source of noise for 24 hours."
-            },
-            {
-                fact: "Attention is architecture. Build where it matters.",
-                upgrade: "Spend 10 minutes designing your focus tomorrow."
-            },
-            {
-                fact: "You're not stuck. You're processing.",
-                upgrade: "Delay one decision by 12 hours. Let it compute."
-            }
+            { msg: "You don't need more information. You need more silence.", hint: "Remove one source of noise for 24 hours." },
+            { msg: "Attention is architecture. Build where it matters.", hint: "Spend 10 minutes designing your focus tomorrow." },
+            { msg: "You're not stuck. You're processing.", hint: "Delay one decision by 12 hours. Let it compute." }
         ];
 
-        let revealCount = 0;
-        let usedIndexes = [];
+        let step = 0;
+        let used = [];
 
-        function getRandomUpgrade() {
-            if (usedIndexes.length >= upgrades.length) usedIndexes = [];
-            let index;
-            do {
-                index = Math.floor(Math.random() * upgrades.length);
-            } while (usedIndexes.includes(index));
-            usedIndexes.push(index);
-            return upgrades[index];
+        const msgEl = document.getElementById('msg');
+        const hintEl = document.getElementById('hint');
+        const hintText = document.getElementById('hintText');
+        const cta = document.getElementById('cta');
+        const initCard = document.getElementById('initCard');
+        const finalStage = document.getElementById('finalStage');
+        const footerLabel = document.getElementById('footerLabel');
+
+        function pickUpgrade() {
+            if (used.length >= upgrades.length) used = [];
+            let i;
+            do { i = Math.floor(Math.random() * upgrades.length); } while (used.includes(i));
+            used.push(i);
+            return upgrades[i];
         }
 
-        function revealUpgrade() {
-            const factText = document.getElementById('factText');
-            const upgradeText = document.getElementById('upgradeText');
-            const btn = document.getElementById('revealBtn');
-            const btnText = document.getElementById('btnText');
-            const initialCard = document.getElementById('initialCard');
-            const finalStage = document.getElementById('finalStage');
-            const footerText = document.getElementById('footerText');
+        function animate(el, out) {
+            el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            el.style.opacity = out ? 0 : 1;
+            el.style.transform = out ? 'translateY(-8px)' : 'translateY(0)';
+        }
 
-            btn.disabled = true;
-
-            factText.classList.remove('show');
-            factText.classList.add('hide');
-            upgradeText.classList.remove('show');
-            upgradeText.classList.add('hide');
+        cta.addEventListener('click', () => {
+            cta.disabled = true;
+            
+            animate(msgEl, true);
+            if (!hintEl.hidden) animate(hintEl, true);
 
             setTimeout(() => {
-                revealCount++;
-
-                if (revealCount <= 2) {
-                    const data = getRandomUpgrade();
-                    factText.innerHTML = data.fact;
-                    upgradeText.innerHTML = `<span style="color:var(--accent-sparkle); font-weight:700; text-transform:uppercase; letter-spacing:2px; font-size:0.9rem;">Upgrade:</span><br>${data.upgrade}`;
-                    upgradeText.style.display = 'block';
-
-                    factText.classList.remove('hide');
-                    factText.classList.add('show');
-                    upgradeText.classList.remove('hide');
-                    upgradeText.classList.add('show');
-
-                    btnText.textContent = 'Reveal More';
-                    btn.disabled = false;
+                step++;
+                
+                if (step <= 2) {
+                    const data = pickUpgrade();
+                    msgEl.textContent = data.msg;
+                    hintText.textContent = data.hint;
+                    hintEl.hidden = false;
+                    
+                    animate(msgEl, false);
+                    animate(hintEl, false);
+                    cta.disabled = false;
                 } else {
-                    initialCard.classList.add('fade-out');
+                    initCard.classList.add('hidden');
                     finalStage.classList.add('visible');
-                    // Hide footer text when final stage is visible
-                    footerText.classList.add('hidden');
+                    footerLabel.classList.add('hidden');
                 }
-            }, 500);
-        }
-
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('factText').classList.add('show');
-                document.getElementById('pageTitle').classList.add('visible');
-            }, 500);
+            }, 450);
         });
     </script>
 </body>
-
 </html>
