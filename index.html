@@ -37,6 +37,9 @@
         body {
             font-family: 'Jost', system-ui, sans-serif;
             background: var(--bg-deep);
+            /* For background picture testing */
+            /* background: url('assets/Starry_sky.jpg') no-repeat center center fixed; */
+            background-size: cover;
             color: var(--white);
             min-height: 100dvh;
             overflow-x: hidden;
@@ -53,8 +56,15 @@
                 var(--bg-deep);
             z-index: -2;
         }
+        /* For background picture testing */
+        /*
+        .bg-layer {
+            display: none;
+        }
+        */
 
         /* Floating orbs */
+        
         .orb {
             position: fixed;
             border-radius: 50%;
@@ -88,6 +98,12 @@
             left: 30%;
             animation-delay: -14s;
         }
+        /* Only for picture testing */
+        /*
+        .orb {
+            display: none;
+        }
+        */
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
@@ -407,7 +423,7 @@
 
     <main>
         <section class="scene">
-            <h1 class="headline">Become a Futurehuman Now</h1>
+            <h1 class="headline">Unlock your Next Human Upgrade</h1>
 
             <!-- Initial Card -->
             <article class="card" id="initCard">
@@ -464,9 +480,32 @@
 
     <script>
         const upgrades = [
-            { msg: "You don't need more information. You need more silence.", hint: "Remove one source of noise for 24 hours." },
-            { msg: "Attention is architecture. Build where it matters.", hint: "Spend 10 minutes designing your focus tomorrow." },
-            { msg: "You're not stuck. You're processing.", hint: "Delay one decision by 12 hours. Let it compute." }
+            { msg: "You're overwhelmed by information but desperately addicted to the distraction it provides.", hint: "Unfollow ten sources that provide noise and not nourishment. Do it now." },
+            { msg: "We treat our attention as an infinite resource, and nothing important ever seems to get done.", hint: "Decide on the three things that will get your undivided attention tomorrow. Everything else is a distraction." },
+            { msg: "There's a strange belief that every problem must be solved immediately which ensures you're always solving the wrong problem.", hint: "Pick one decision and do nothing about it for a day. Let your subconscious do the heavy lifting." },
+            { msg: "We spend too much time formulating opinions and too little crafting the questions that actually lead to a better one.", hint: "In your next conversation, ask one genuinely curious question instead of offering opinions." },
+            { msg: "We've become digital hoarders to build a library of wisdom, but we're just adding to our anxiety.", hint: "Go to your 'saved' folder on any platform. Delete the oldest things in it without re-reading it." },
+            { msg: "We love to announce self-improvement to avoid boring, repetitive work that actually creates change.", hint: "Pick one tiny positive habit. Do it again today. Don't tell anyone." },
+            { msg: "There's a human tendency to “improve” by adding more steps than having the courage to simply remove the silly bits.", hint: "Find one routine you perform daily. Remove one step from it. See if anyone notices or anything breaks. " },
+            { msg: "We guard our money with our lives but give away our time and energy to anyone who asks nicely enough.", hint: "Find one commitment in the next week that fills you with a sense of dread. Cancel it." },
+            { msg: "Time is not a thing to be 'managed' and 'saved'. The only thing you can manage is what you do within it.", hint: "Choose one thing today to do 10% slower and with absurdly high quality." },
+            { msg: "Having an immediate opinion on every trend is a surefire way to have an opinion on nothing that matters.", hint: "Notice the most talked-about thing in the news today and decide to have no opinion on it whatsoever." },
+            { msg: "A stable sense of self is not a virtue. The most interesting people are in a constant state of quiet self-revision.", hint: "Do one small thing today that doesn't fit the expectation you've built for yourself." },
+            { msg: "Style is not something you add. The most elegant people are masters of simplification.", hint: "Look at what you're wearing. Remove one accessory." },
+            { msg: "Our default way of carrying ourselves is a less confident version of who we could be.", hint: "For the next hour walk as though you are 5% taller. See how that makes you feel." },
+            { msg: "Softening our truths to make them more palatable makes them less useful.", hint: "In your next conversation, state one of your opinions directly, without apologies or softening clauses." },
+            { msg: "We spend a lot of time around people who are a reflection of who we are, not who we want to become.", hint: "Identify one person who represents your future. Find a way to be in their orbit this month." },
+            { msg: "It's easy to make decisions based on the next ten minutes but difficult for the next ten years.", hint: "Make one small decision today that is an explicit gift to your future self." },
+            { msg: "There is no reason to be embarrassed about what you want.", hint: "Write down one thing you deeply want without any caveats to its practicality or deserving it." },
+            { msg: "We let our own standards slip but are deeply offended when other people fail to meet them.", hint: "Pick one small, personal standard of excellence. Hold yourself to it with rigor for the rest of the week." },
+            { msg: "What screams for our immediate attention will not matter in a decade. Our brains are just terrible at telling the difference.", hint: "Look at your to-do list. Find the task that serves your 10-year future. Do that one first." },
+            { msg: "We have a strange loyalty to our past selves, as though we owe them something. We don't.", hint: "Consciously break one of your old, outdated habits today." },
+            { msg: "People with the most influence are often the ones who have mastered the art of shutting up.", hint: "In your next meeting, listen to the point where you feel you absolutely must speak. Then wait ten more seconds." },
+            { msg: "If your being 'nice' means being infinitely available, you're of no real use to anyone.", hint: "Say 'no' to one small, perfectly reasonable request today, without a lengthy explanation." },
+            { msg: "Every thought is not a matter of public record, requiring an immediate response.", hint: "Choose one non-urgent message. Consciously decide you will never reply to it." },
+            { msg: "Stop collecting connections like stamps. Cultivate the few that actually provide value.", hint: "Send one, genuinely thoughtful message to someone who represents your future, not your past." },
+            { msg: "The human brain is a conformity machine. It's a wonderful talent for surviving in a tribe but a terrible one for doing anything interesting.", hint: "Find one small, harmless way to break a social script today." }
+
         ];
 
         let step = 0;
