@@ -428,29 +428,36 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--white);
-            background: linear-gradient(135deg, var(--bg-glow), var(--accent), var(--accent-light));
-            border: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, rgba(26, 11, 46, 0.9), rgba(123, 44, 191, 0.8));
+            border: 1px solid rgba(224, 170, 255, 0.3);
             border-radius: 100px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             position: relative;
-            overflow: hidden;
+            box-shadow: 0 0 15px rgba(123, 44, 191, 0.3), inset 0 0 20px rgba(224, 170, 255, 0.05);
         }
 
         .share-btn::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 200%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            animation: shimmer 3s infinite;
+            inset: -1px;
+            border-radius: 100px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light), var(--accent));
+            background-size: 200% 200%;
+            animation: glow-pulse 3s ease-in-out infinite;
+            z-index: -1;
+            opacity: 0.5;
         }
 
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        @keyframes glow-pulse {
+            0%, 100% { 
+                background-position: 0% 50%;
+                opacity: 0.3;
+            }
+            50% { 
+                background-position: 100% 50%;
+                opacity: 0.6;
+            }
         }
 
         .share-btn.visible {
@@ -459,8 +466,13 @@
 
         .share-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(123, 44, 191, 0.6), 0 0 20px rgba(224, 170, 255, 0.3);
+            box-shadow: 0 8px 30px rgba(123, 44, 191, 0.5), 0 0 40px rgba(224, 170, 255, 0.2);
             border-color: var(--accent-light);
+            background: linear-gradient(135deg, rgba(26, 11, 46, 1), rgba(123, 44, 191, 0.9));
+        }
+
+        .share-btn:hover::before {
+            opacity: 0.8;
         }
 
         .share-btn:active {
