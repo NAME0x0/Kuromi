@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <style>
         :root {
             --bg-deep: #050505;
@@ -412,6 +413,325 @@
             width: 20px;
             height: 20px;
         }
+
+        /* Share to Instagram button */
+        .share-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            margin-top: 0.5rem;
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(0.55rem, 1.8vw, 0.7rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--bg-glow), var(--accent), var(--accent-light));
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .share-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .share-btn.visible {
+            display: inline-flex;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(123, 44, 191, 0.6), 0 0 20px rgba(224, 170, 255, 0.3);
+            border-color: var(--accent-light);
+        }
+
+        .share-btn:active {
+            transform: translateY(0);
+        }
+
+        .share-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Share overlay for screenshot */
+        .share-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space);
+        }
+
+        .share-overlay.active {
+            display: flex;
+        }
+
+        .share-overlay .bg-layer-clone {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% 0%, var(--bg-glow) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(123, 44, 191, 0.15) 0%, transparent 50%),
+                var(--bg-deep);
+            z-index: -2;
+        }
+
+        .share-overlay .orb-clone {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .share-overlay .orb-clone-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            top: 10%;
+            left: -5%;
+        }
+
+        .share-overlay .orb-clone-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent-light);
+            bottom: 20%;
+            right: -3%;
+        }
+
+        .share-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 480px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .share-headline {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(0.75rem, 3vw, 1.3rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            text-align: center;
+            color: var(--white);
+            text-shadow: 0 0 30px rgba(224, 170, 255, 0.5);
+        }
+
+        .share-subheadline {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            font-style: italic;
+            color: var(--accent-light);
+            margin-top: -0.75rem;
+            text-align: center;
+        }
+
+        .share-card {
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: clamp(1.5rem, 5vw, 2.5rem);
+            text-align: center;
+        }
+
+        .share-card .message {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+        }
+
+        .share-card .upgrade-hint {
+            border-top: 1px solid var(--glass-border);
+            padding-top: 1.25rem;
+        }
+
+        .share-card .upgrade-hint strong {
+            display: block;
+            color: var(--accent-light);
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .share-card .hint-text {
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .share-sticker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 100px;
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(0.6rem, 2vw, 0.75rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--white);
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(123, 44, 191, 0.5);
+        }
+
+        .share-sticker svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Share modal for download/instructions */
+        .share-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space);
+        }
+
+        .share-modal.active {
+            display: flex;
+        }
+
+        .share-modal-content {
+            background: var(--glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: clamp(1.5rem, 5vw, 2.5rem);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .share-modal h3 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            color: var(--accent-light);
+        }
+
+        .share-modal p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .share-modal p strong {
+            color: var(--accent-light);
+        }
+
+        .share-modal-preview {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: calc(var(--radius) / 2);
+            margin-bottom: 1rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .share-modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .share-modal-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.5rem;
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(0.55rem, 1.8vw, 0.65rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-modal-btn.primary {
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            color: var(--white);
+        }
+
+        .share-modal-btn.secondary {
+            background: var(--glass);
+            color: var(--white);
+            border: 1px solid var(--glass-border);
+        }
+
+        .share-modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -434,6 +754,10 @@
                 </div>
                 <button class="cta" id="cta" type="button">
                     <span>Reveal More</span>
+                </button>
+                <button class="share-btn" id="shareBtn" type="button">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    <span>I initiated my upgrade</span>
                 </button>
             </article>
 
@@ -478,6 +802,50 @@
         </nav>
     </footer>
 
+    <!-- Share Overlay (for screenshot capture) -->
+    <div class="share-overlay" id="shareOverlay">
+        <div class="bg-layer-clone"></div>
+        <div class="orb-clone orb-clone-1"></div>
+        <div class="orb-clone orb-clone-2"></div>
+        <div class="share-content" id="shareContent">
+            <h1 class="share-headline">Unlock Your Next Human Upgrade</h1>
+            <p class="share-subheadline">I initiated my upgrade</p>
+            <div class="share-card">
+                <p class="message" id="shareMsg"></p>
+                <div class="upgrade-hint">
+                    <strong>Upgrade</strong>
+                    <span class="hint-text" id="shareHint"></span>
+                </div>
+            </div>
+            <div class="share-sticker">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                <span>Initiate yours today</span>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <button class="close-modal" id="closeModal" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="share-modal-content">
+            <h3>Almost there!</h3>
+            <img class="share-modal-preview" id="sharePreview" src="" alt="Your upgrade screenshot">
+            <p id="modalInstructions">Tap below to save & open Instagram Stories</p>
+            <div class="share-modal-actions">
+                <button class="share-modal-btn primary" id="downloadBtn" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    <span>Save & Open Instagram</span>
+                </button>
+                <button class="share-modal-btn secondary" id="closeModalBtn" type="button">
+                    <span>Close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const upgrades = [
             { msg: "You're overwhelmed by information but desperately addicted to the distraction it provides.", hint: "Unfollow ten sources that provide noise and not nourishment. Do it now." },
@@ -517,11 +885,174 @@
         const initCard = document.getElementById('initCard');
         const finalStage = document.getElementById('finalStage');
         const footerLabel = document.getElementById('footerLabel');
+        
+        // Share elements
+        const shareBtn = document.getElementById('shareBtn');
+        const shareOverlay = document.getElementById('shareOverlay');
+        const shareContent = document.getElementById('shareContent');
+        const shareMsg = document.getElementById('shareMsg');
+        const shareHint = document.getElementById('shareHint');
+        const shareModal = document.getElementById('shareModal');
+        const sharePreview = document.getElementById('sharePreview');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const closeModal = document.getElementById('closeModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        
+        let currentUpgrade = null;
 
         function pickRandomUpgrade() {
             const i = Math.floor(Math.random() * upgrades.length);
             return upgrades[i];
         }
+        
+        // Share to Instagram functionality
+        const KOMI_LINK = 'https://briarprestidge.komi.io';
+        
+        async function copyLinkToClipboard() {
+            try {
+                await navigator.clipboard.writeText(KOMI_LINK);
+                return true;
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = KOMI_LINK;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    return true;
+                } catch (e) {
+                    document.body.removeChild(textArea);
+                    return false;
+                }
+            }
+        }
+        
+        async function captureAndShare() {
+            if (!currentUpgrade) return;
+            
+            // Copy link to clipboard immediately
+            const linkCopied = await copyLinkToClipboard();
+            
+            // Populate share overlay with current quote
+            shareMsg.textContent = currentUpgrade.msg;
+            shareHint.textContent = currentUpgrade.hint;
+            
+            // Show share overlay for capture
+            shareOverlay.classList.add('active');
+            
+            // Wait for render
+            await new Promise(r => setTimeout(r, 100));
+            
+            try {
+                // Capture the full viewport
+                const canvas = await html2canvas(shareOverlay, {
+                    backgroundColor: '#050505',
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                });
+                
+                // Hide overlay
+                shareOverlay.classList.remove('active');
+                
+                // Convert canvas to blob for sharing
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                const file = new File([blob], 'my-upgrade.png', { type: 'image/png' });
+                
+                // Check if Web Share API is available (mobile devices)
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'I initiated my upgrade',
+                            text: 'Initiate yours today → ' + KOMI_LINK,
+                            url: KOMI_LINK
+                        });
+                        return; // Success - native share completed
+                    } catch (shareErr) {
+                        // User cancelled or share failed, fall through to fallback
+                        if (shareErr.name === 'AbortError') return;
+                    }
+                }
+                
+                // Fallback for desktop or if Web Share fails
+                const dataUrl = canvas.toDataURL('image/png');
+                sharePreview.src = dataUrl;
+                
+                // Detect if mobile
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                const modalInstructions = document.getElementById('modalInstructions');
+                
+                const clipboardMsg = linkCopied ? '<br><strong style=\"color: var(--accent-light);\">✓ Link copied to clipboard!</strong>' : '';
+                
+                if (isMobile) {
+                    modalInstructions.innerHTML = 'Tap below to save & open Instagram. Paste the link in your Story using the Link Sticker!' + clipboardMsg;
+                } else {
+                    modalInstructions.innerHTML = 'Save the image, then upload it to your Instagram Story. Paste the link in your Link Sticker!' + clipboardMsg;
+                }
+                
+                shareModal.classList.add('active');
+                
+                // Download and open Instagram button
+                downloadBtn.onclick = async () => {
+                    // Copy link again just before action
+                    await copyLinkToClipboard();
+                    
+                    // Save the image
+                    const link = document.createElement('a');
+                    link.download = 'my-upgrade-' + Date.now() + '.png';
+                    link.href = dataUrl;
+                    link.click();
+                    
+                    // On mobile, try to open Instagram after a short delay
+                    if (isMobile) {
+                        setTimeout(() => {
+                            // Try Instagram Stories camera deep link
+                            window.location.href = 'instagram://story-camera';
+                            
+                            // Fallback to regular Instagram if deep link fails
+                            setTimeout(() => {
+                                window.location.href = 'instagram://app';
+                            }, 1500);
+                        }, 500);
+                    }
+                    
+                    // Close modal after action
+                    setTimeout(() => {
+                        shareModal.classList.remove('active');
+                    }, 1000);
+                };
+                
+            } catch (err) {
+                console.error('Screenshot failed:', err);
+                shareOverlay.classList.remove('active');
+                alert('Could not capture screenshot. Please try again.');
+            }
+        }
+        
+        // Event listeners for share functionality
+        shareBtn.addEventListener('click', captureAndShare);
+        
+        closeModal.addEventListener('click', () => {
+            shareModal.classList.remove('active');
+        });
+        
+        closeModalBtn.addEventListener('click', () => {
+            shareModal.classList.remove('active');
+        });
+        
+        // Close modal on backdrop click
+        shareModal.addEventListener('click', (e) => {
+            if (e.target === shareModal) {
+                shareModal.classList.remove('active');
+            }
+        });
 
         function animate(el, out) {
             el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
@@ -540,14 +1071,17 @@
                 
                 if (step === 1) {
                     // First click: show one random fortune
-                    const data = pickRandomUpgrade();
-                    msgEl.textContent = data.msg;
-                    hintText.textContent = data.hint;
+                    currentUpgrade = pickRandomUpgrade();
+                    msgEl.textContent = currentUpgrade.msg;
+                    hintText.textContent = currentUpgrade.hint;
                     hintEl.hidden = false;
                     
                     animate(msgEl, false);
                     animate(hintEl, false);
                     cta.disabled = false;
+                    
+                    // Show share button
+                    shareBtn.classList.add('visible');
                 } else {
                     // Second click: show final stage
                     initCard.classList.add('hidden');
